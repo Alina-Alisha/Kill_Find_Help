@@ -34,13 +34,13 @@ class Play() : Scene() {
             xy(200, 300)
         }
 
-        val monsters = Array(2) {
-            Monster(pink.idleAnimation).apply {
-                scale(2)
-                xy(450, 350)
-                //moveBy(0.0, 25.0, 1.seconds)
-            }
-        }
+//        val monsters = Array(2) {
+//            Monster(pink.idleAnimation).apply {
+//                scale(2)
+//                xy(450, 350)
+//                //moveBy(0.0, 25.0, 1.seconds)
+//            }
+//        }
 
         addChild(player)
 
@@ -62,43 +62,43 @@ class Play() : Scene() {
             player.handleKeys(keys, disp, doll.idleAnimation, doll.attackAnimation)
             //if (keys[Key.SPACE]) { player.playAnimation(spriteAnimation = doll.jumpAnimation, times = 0, spriteDisplayTime = 100.milliseconds) }
         }
-        while (true) {
-            monsters.forEach { it ->
-                val monster = it
-                addChild(monster)
-                monster.addUpdater { monster.animate(pink.idleAnimation, pink.walkAnimation, it) }
-                monster.onCollision({ it == player && player.isAttacking }) {
-                    monster.hurt(
-                        pink.hurtAnimation,
-                        pink.deathAnimation
-                    )
-                    //visible = false
-                    player.isAttacking = false
-                    monster.isHurt = false
-                }
-            }
+//        while (true) {
+//            monsters.forEach { it ->
+//                val monster = it
+//                addChild(monster)
+//                monster.addUpdater { monster.animate(pink.idleAnimation, pink.walkAnimation, it) }
+//                monster.onCollision({ it == player && player.isAttacking }) {
+//                    monster.hurt(
+//                        pink.hurtAnimation,
+//                        pink.deathAnimation
+//                    )
+//                    //visible = false
+//                    player.isAttacking = false
+//                    monster.isHurt = false
+//                }
+//            }
+//        }
+
+        val monster = Monster(pink.idleAnimation).apply {
+            scale(2)
+            xy(250, 350)
         }
 
-//        val monster = Monster(pink.idleAnimation, pink.walkAnimation).apply {
-//            scale(2)
-//            xy(250, 350)
-//        }
+        addChild(monster)
 
-//        addChild(monster)
-
-//        monster.addUpdater {
-//            monster.animate(pink.idleAnimation, pink.walkAnimation, it)
-//        }
-//        monster.onCollision({ it == player && player.isAttacking }) {
-//            monster.hurt(
-//                pink.hurtAnimation,
-//                pink.deathAnimation
-//            )
-//            player.isAttacking = false
-//            monster.isHurt = false
-//            //if (monster.alive == 0)
-//            //    removeChildAt(getChildIndex(monster))
-//        }
+        monster.addUpdater {
+            monster.animate(pink.idleAnimation, pink.walkAnimation, it)
+        }
+        monster.onCollision({ it == player && player.isAttacking }) {
+            monster.hurt(
+                pink.hurtAnimation,
+                pink.deathAnimation
+            )
+            player.isAttacking = false
+            monster.isHurt = false
+            //if (monster.alive == 0)
+            //    removeChildAt(getChildIndex(monster))
+        }
     }
 }
 
