@@ -19,7 +19,7 @@ class Monster(
     var isHurt = false
     private val self_x = x
     private val self_y = y
-    var deadCooldown = 0.1
+    var deadCooldown = 0.16
     var back = true
     fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, delta: TimeSpan) {
         if (alive == 0)

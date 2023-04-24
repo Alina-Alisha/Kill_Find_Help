@@ -29,7 +29,7 @@ object MyModule : Module() {
     // define the game configs
 
     override val title: String = "My Game"
-    override val size: SizeInt = SizeInt(512, 512)
+    override val size: SizeInt = SizeInt(560, 338)
 
     // add the scenes to the module
     override suspend fun AsyncInjector.configure() {

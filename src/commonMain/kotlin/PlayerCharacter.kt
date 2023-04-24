@@ -17,10 +17,10 @@ class PlayerCharacter(
     var isAttacking = false
     //var notAttacking = true
     private val assignments = listOf(
-        KeyAssignment(Key.LEFT, walkLeftAnimation) { x -= it },
-        KeyAssignment(Key.RIGHT, walkRightAnimation) { x += it },
-        KeyAssignment(Key.UP, walkRightAnimation) { y -= it },
-        KeyAssignment(Key.DOWN, walkRightAnimation) { y += it },
+        KeyAssignment(Key.A, walkLeftAnimation) { x -= it },
+        KeyAssignment(Key.D, walkRightAnimation) { x += it },
+        KeyAssignment(Key.W, walkRightAnimation) { y -= it },
+        KeyAssignment(Key.S, walkRightAnimation) { y += it },
     )
 
     private var isMoving = false
