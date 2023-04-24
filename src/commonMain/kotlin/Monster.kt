@@ -20,6 +20,7 @@ class Monster(
     private val self_x = x
     private val self_y = y
     var deadCooldown = 0.1
+    var back = true
     fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, delta: TimeSpan) {
         if (alive == 0)
             deadCooldown -= delta.seconds
@@ -27,13 +28,16 @@ class Monster(
             parent?.removeChild(this)
         if (alive > 0 && !isHurt) {
             playAnimation(spriteAnimation = idleAnimation, spriteDisplayTime = 200.milliseconds)
-            /*if (x <= self_x + 50 || x >= self_x - 50) {
-                playAnimation(spriteAnimation = walkAnimation, times = 1, spriteDisplayTime = 200.milliseconds)
+            if (x == 50.0) back = false
+            if (x == 350.0) back = true
+            if (x < 350.0 && !back) {
                 x++
-            } else {
-                stopAnimation() //тоже не робит
+                playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
+            } else if (x > 50.0 && back) {
+                playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
+                x--
                 //playAnimation(spriteAnimation = idleAnimation, spriteDisplayTime = 200.milliseconds)
-            }*/
+            }
         }
 
     }
