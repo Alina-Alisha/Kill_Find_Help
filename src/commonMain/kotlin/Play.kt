@@ -1,9 +1,13 @@
 import com.soywiz.klock.*
 import com.soywiz.korev.*
+import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
+import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
+import com.soywiz.korge.view.onClick
 import com.soywiz.korge.view.tween.*
 import com.soywiz.korim.format.*
+import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 import kotlin.random.*
 
@@ -11,12 +15,14 @@ fun rand(start: Int, end: Int): Int {
     require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
     return Random(System.nanoTime()).nextInt(end - start + 1) + start
 }
+
 class Play() : Scene() {
+    var change = false
     override suspend fun SContainer.sceneInit() {
         //readImage("game_background_4.jpg")).dockedTo(Anchor.TOP_LEFT, ScaleMode.EXACT)
-        val x0 = sceneContainer.width/2
-        val y0 = sceneContainer.height/2
-        var img = image ( resourcesVfs["m_game_background_4.png"].readBitmap(), 0.5, 0.5) {
+        val x0 = sceneContainer.width / 2
+        val y0 = sceneContainer.height / 2
+        var img = image(resourcesVfs["m_game_background_4.png"].readBitmap(), 0.5, 0.5) {
             x = x0
             y = y0
         }
@@ -43,13 +49,6 @@ class Play() : Scene() {
             xy(200, 200)
         }
 
-//        val monsters = Array(1) {
-//            Monster(pink.idleAnimation).apply {
-//                scale(2)
-//                xy(450, 350)
-//            }
-//        }
-
         addChild(player)
         player.addUpdater { time ->
             val scale = 16.milliseconds / time
@@ -67,36 +66,61 @@ class Play() : Scene() {
             }
 
             player.handleKeys(keys, disp, doll.idleAnimation, doll.attackAnimation)
-            //if (keys[Key.SPACE]) { player.playAnimation(spriteAnimation = doll.jumpAnimation, times = 0, spriteDisplayTime = 100.milliseconds) }
         }
-
         var numOfMonsters = 0
-        var allMonsters = 0
-        while (allMonsters <= 2) {
-            var x = rand(20, 500)
-            var y = rand(70, 250)
-            val monster = Monster(pink.idleAnimation).apply {
-                scale(2)
-                xy(x, y)
-            }
-            addChild(monster)
-            allMonsters++
-            println(allMonsters)
-            monster.addUpdater {
-                monster.animate(pink.idleAnimation, pink.walkAnimation, it)
-            }
-            monster.onCollision({ it == player && player.isAttacking }) {
-                monster.hurt(
-                    pink.hurtAnimation,
-                    pink.deathAnimation
-                )
-                player.isAttacking = false
-                monster.isHurt = false
-                //if (monster.alive == 0)
-                //    removeChildAt(getChildIndex(monster))
-            }
-
+        val n = MyModule.level
+        when (MyModule.level) {
+            1 -> numOfMonsters = 2
+            2 -> numOfMonsters = 5
         }
+        var monsters = mutableListOf<Monster>()
+        if (MyModule.level == n) {
+            for (allMonsters in 1..numOfMonsters) {
+                var x = rand(20, 500)
+                var y = rand(70, 250)
+                val monster = Monster(pink.idleAnimation).apply {
+                    scale(2)
+                    xy(x, y)
+                }
+                addChild(monster)
+                monsters.add(monster)
+                monster.addUpdater {
+                    monster.animate(pink.idleAnimation, pink.walkAnimation, it)
+                }
+                monster.onCollision({ it == player && player.isAttacking }) {
+                    monster.hurt(
+                        pink.hurtAnimation,
+                        pink.deathAnimation
+                    )
+                    player.isAttacking = false
+                    monster.isHurt = false
+                    if (monster.alive == 0) {
+                        monsters.remove(monster)
+                    }
+                    if (monsters.size == 0) {
+                        change = true
+                        MyModule.level = n + 1
+                        println(MyModule.level)
+                        launch {
+                            sceneContainer.changeTo<GameMenu>()
+                        }
+                    }
+                }
+
+            }
+            if (MyModule.level == n + 1) sceneContainer.changeTo<GameMenu>()
+            // println(MyModule.level)
+        }
+
+
+        var menuButton = uiTextButton(100.0, 32.0) {
+            text = "menu"
+            position(0, 0)
+            onClick {
+                sceneContainer.changeTo<GameMenu>()
+            }
+        }
+        //addUpdater { if (MyModule.level == n + 1) sceneContainer.changeTo<GameMenu>() }
     }
 }
 

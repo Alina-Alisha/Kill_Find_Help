@@ -19,7 +19,7 @@ class Menu() : Scene() {
             text = "Play"
             position(views.virtualWidth / 2 - 128, views.virtualHeight / 2 - 64)
             onClick {
-                sceneContainer.changeTo<Play>()
+                sceneContainer.changeTo<GameMenu>()
             }
         }
         var exitButton = uiTextButton(256.0, 32.0) {

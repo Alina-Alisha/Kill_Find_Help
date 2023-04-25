@@ -21,7 +21,6 @@ import com.soywiz.korinject.*
 
 @OptIn(KorgeUntested::class)
 suspend fun main() = Korge(Korge.Config(module = MyModule))
-
 object MyModule : Module() {
     // define the opening scene
     override val mainScene = Menu::class
@@ -35,5 +34,7 @@ object MyModule : Module() {
     override suspend fun AsyncInjector.configure() {
         mapPrototype { Menu() }
         mapPrototype { Play() }
+        mapPrototype { GameMenu() }
     }
+    var level = 1
 }

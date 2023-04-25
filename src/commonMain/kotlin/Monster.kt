@@ -21,6 +21,7 @@ class Monster(
     private val self_y = y
     var deadCooldown = 0.16
     var back = true
+    var dead = false
     fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, delta: TimeSpan) {
         if (alive == 0)
             deadCooldown -= delta.seconds
@@ -48,6 +49,8 @@ class Monster(
             playAnimation(spriteAnimation = hurtAnimation, spriteDisplayTime = 200.milliseconds)
             alive -= 1
         }
-        else playAnimation(spriteAnimation = deathAnimation, spriteDisplayTime = 200.milliseconds)
+        else {
+            playAnimation(spriteAnimation = deathAnimation, spriteDisplayTime = 200.milliseconds)
+        }
     }
 }
