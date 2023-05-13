@@ -21,20 +21,18 @@ import com.soywiz.korinject.*
 
 @OptIn(KorgeUntested::class)
 suspend fun main() = Korge(Korge.Config(module = MyModule))
-object MyModule : Module() {
-    // define the opening scene
-    override val mainScene = Menu::class
 
-    // define the game configs
+object MyModule : Module() {
+    override val mainScene = Menu::class
 
     override val title: String = "My Game"
     override val size: SizeInt = SizeInt(560, 338)
 
-    // add the scenes to the module
     override suspend fun AsyncInjector.configure() {
         mapPrototype { Menu() }
         mapPrototype { Play() }
         mapPrototype { GameMenu() }
     }
+
     var level = 1
 }

@@ -1,6 +1,6 @@
 import com.soywiz.korim.bitmap.*
 
-class Chest (spriteMapChest: Bitmap){
+class Chest(spriteMapChest: Bitmap) {
     val idleAnimation = com.soywiz.korge.view.SpriteAnimation(
         spriteMap = spriteMapChest,
         spriteWidth = 100,

@@ -4,14 +4,10 @@ import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
-import com.soywiz.korge.view.onClick
-import com.soywiz.korge.view.tween.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
-import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
-import com.soywiz.korma.geom.*
 import kotlin.random.*
 
 fun rand(start: Int, end: Int): Int {
@@ -84,15 +80,11 @@ class Play() : Scene() {
 
         }
 
-//        val h = HealthAnimate(heart.idleAnimation).apply { xy(280, 10) }
-//        addChild(h)
-//        h.addUpdater { h.dying(heart.dyingAnimation, heart.deadAnimation, it) }
-        val offset = 35 //длина спрайта
+        val offset = 35 //длина спрайта сердечка
         var x = if (player.health % 2 == 0)
             x0 - offset * player.health / 2
         else
             x0 - offset * (player.health + 1) / 2
-        //val lives = mutableListOf<HealthAnimate>()
         val y = 10.0
         for (allLives in 1..player.health) {
             val live = HealthAnimate(heart.idleAnimation).apply {
@@ -116,7 +108,6 @@ class Play() : Scene() {
         }
         val monsters = mutableListOf<Monster>()
 
-        var winTime = 1000000.0
         for (allMonsters in 1..numOfMonsters) {
             val x = rand(20, 500)
             val y = rand(70, 250)

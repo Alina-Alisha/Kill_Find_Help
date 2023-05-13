@@ -9,16 +9,14 @@ import com.soywiz.korio.file.std.*
 
 class Menu() : Scene() {
     override suspend fun SContainer.sceneInit() {
-        // set a background color
         val x0 = sceneContainer.width / 2
         val y0 = sceneContainer.height / 2
         var img = image(resourcesVfs["bckgr.png"].readBitmap(), 0.5, 0.5) {
             x = x0
             y = y0
         }
-        val font =  resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
+        val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
 
-        // Add a text to show the name of the game
         var gameNameText = text("Kill (us)", 40.0, Colors.BLACK, font) {
             position(views.virtualWidth / 2 - 50, views.virtualHeight / 2 - 128)
         }

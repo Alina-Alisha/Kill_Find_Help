@@ -1,7 +1,7 @@
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
 
-class HealthAnimate (
+class HealthAnimate(
     idleAnimation: SpriteAnimation,
 ) : Sprite(idleAnimation) {
     var alive = true
@@ -11,7 +11,7 @@ class HealthAnimate (
             playAnimation(spriteAnimation = dyingAnimation, spriteDisplayTime = 500.milliseconds)
             lives -= delta.seconds
         }
-        if(lives <= 0)
+        if (lives <= 0)
             playAnimationLooped(spriteAnimation = deadAnimation)
     }
 }

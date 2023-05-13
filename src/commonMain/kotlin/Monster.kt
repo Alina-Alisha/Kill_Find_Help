@@ -6,22 +6,14 @@ import com.soywiz.korge.time.*
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.*
 
-data class Animations(
-    val animation: SpriteAnimation,
-    val block: (Double) -> Unit
-)
-
 class Monster(
     idleAnimation: SpriteAnimation
 ) : Sprite(idleAnimation) {
 
     var alive = 10
     var isHurt = false
-    private val self_x = x
-    private val self_y = y
     var deadCooldown = 0.16
     var back = true
-    var dead = false
     fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, delta: TimeSpan) {
         if (alive == 0)
             deadCooldown -= delta.seconds
@@ -37,7 +29,6 @@ class Monster(
             } else if (x > 50.0 && back) {
                 playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
                 x--
-                //playAnimation(spriteAnimation = idleAnimation, spriteDisplayTime = 200.milliseconds)
             }
         }
 
@@ -48,8 +39,7 @@ class Monster(
             isHurt = true
             playAnimation(spriteAnimation = hurtAnimation, spriteDisplayTime = 200.milliseconds)
             alive -= 1
-        }
-        else {
+        } else {
             playAnimation(spriteAnimation = deathAnimation, spriteDisplayTime = 200.milliseconds)
         }
     }

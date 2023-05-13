@@ -16,6 +16,7 @@ class PlayerCharacter(
     var health = 3
     var isAttacking = false
     var isOpeningChest = false
+
     //var notAttacking = true
     private val assignments = listOf(
         KeyAssignment(Key.A, walkLeftAnimation) { x -= it },
@@ -38,17 +39,10 @@ class PlayerCharacter(
                 isOpeningChest = false
             }
             .any()
-        //if (!isMoving) playAnimation(idleAnimation, spriteDisplayTime = 100.milliseconds)
 
         if (anyMovement != isMoving) {
             if (isMoving) playAnimationLooped(idleAnimation)
             isMoving = anyMovement
         }
-        /*if (isAttacking)
-        {
-            playAnimation(spriteAnimation = attackAnimation, spriteDisplayTime = 100.milliseconds)
-            isAttacking = false
-        }*/
-        //if (inputKeys[Key.SPACE] ) { playAnimation(spriteAnimation = jumpAnimation, times = 0, spriteDisplayTime = 100.milliseconds)}
     }
 }
