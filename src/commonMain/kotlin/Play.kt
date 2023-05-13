@@ -28,6 +28,8 @@ class Play() : Scene() {
 
         val spriteMapChest = resourcesVfs["AoM2.png"].readBitmap()
 
+        val spriteMapRedPotion = resourcesVfs["Red Potion.png"].readBitmap()
+
         val spriteMapIdleDoll = resourcesVfs["doll/Idle.png"].readBitmap()
         val spriteMapWalkRight = resourcesVfs["doll/Walk_R.png"].readBitmap()
         val spriteMapWalkLeft = resourcesVfs["doll/Walk_L.png"].readBitmap()
@@ -93,11 +95,28 @@ class Play() : Scene() {
             addChild(live)
             x += offset
         }
+
+        val loot = Loot(spriteMapRedPotion)
         val blueChest = Chest(spriteMapChest)
         val chest =
             ChestAnimate(blueChest.idleAnimation).apply { xy(rand(20, 450), rand(70, 250)) }
         addChild(chest)
-        chest.onCollision({ it == player && player.isOpeningChest }) { chest.open(blueChest.openAnimation) }
+        val redPotion = LootAnimate(loot.idleAnimation)
+        chest.onCollision({ it == player && player.isOpeningChest }) {
+            chest.open(blueChest.openAnimation)
+            if (player.isOpeningChest) {
+                redPotion.apply {
+                    scale(1.5)
+                    xy(chest.x + 20, chest.y + 30)
+                }
+                addChild(redPotion)
+                redPotion.alive = true
+                redPotion.addUpdater {
+                    redPotion.animate(loot.idleAnimation, it)
+                }
+            }
+
+        }
 
         var numOfMonsters = 0
         val n = MyModule.level

@@ -7,7 +7,7 @@ class ChestAnimate(
     var wasOpen = false
     fun open(openAnimation: SpriteAnimation) {
         if (!wasOpen) {
-            playAnimation(spriteAnimation = openAnimation, spriteDisplayTime = 350.milliseconds)
+            playAnimation(spriteAnimation = openAnimation, spriteDisplayTime = 200.milliseconds)
             wasOpen = true
         }
     }
