@@ -5,7 +5,7 @@ class Doll(
     spriteMapIdle: Bitmap,
     spriteMapWalkRight: Bitmap,
     spriteMapWalkLeft: Bitmap,
-    spriteMapJump: Bitmap,
+    spriteMapOpenChest: Bitmap,
     spriteMapAttack: Bitmap
 ) {
 
@@ -43,13 +43,13 @@ class Doll(
         offsetBetweenColumns = 0,
         offsetBetweenRows = 0,
     )
-    val jumpAnimation = SpriteAnimation(
-        spriteMap = spriteMapJump,
+    val openChestAnimation = SpriteAnimation(
+        spriteMap = spriteMapOpenChest,
         spriteWidth = 128,
         spriteHeight = 128,
         marginTop = 0,
         marginLeft = 0,
-        columns = 8,
+        columns = 10,
         rows = 1,
         offsetBetweenColumns = 0,
         offsetBetweenRows = 0,

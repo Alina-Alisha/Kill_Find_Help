@@ -11,6 +11,7 @@ import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
+import com.soywiz.korma.geom.*
 import kotlin.random.*
 
 fun rand(start: Int, end: Int): Int {
@@ -29,12 +30,12 @@ class Play() : Scene() {
             y = y0
         }
 
-        val spriteMapChest = resourcesVfs["chest.png"].readBitmap()
+        val spriteMapChest = resourcesVfs["AoM2.png"].readBitmap()
 
         val spriteMapIdleDoll = resourcesVfs["doll/Idle.png"].readBitmap()
         val spriteMapWalkRight = resourcesVfs["doll/Walk_R.png"].readBitmap()
         val spriteMapWalkLeft = resourcesVfs["doll/Walk_L.png"].readBitmap()
-        val spriteMapJump = resourcesVfs["doll/Jump.png"].readBitmap()
+        val spriteMapOpenChest = resourcesVfs["doll/chest_opening.png"].readBitmap()
         val spriteMapAttack = resourcesVfs["doll/Attack_2.png"].readBitmap()
 
         val spriteMapIdleMonster = resourcesVfs["pink/Pink_Monster_Idle_4.png"].readBitmap()
@@ -42,24 +43,20 @@ class Play() : Scene() {
         val spriteMapDeath = resourcesVfs["pink/Pink_Monster_Death_8.png"].readBitmap()
         val spriteMapWalkRightMonster = resourcesVfs["pink/Pink_Monster_Walk_Right.png"].readBitmap()
 
-        val doll = Doll(spriteMapIdleDoll, spriteMapWalkRight, spriteMapWalkLeft, spriteMapJump, spriteMapAttack)
+        val spriteMapHeart = resourcesVfs["health.png"].readBitmap()
+
+        val heart = Health(spriteMapHeart)
+
+        val doll = Doll(spriteMapIdleDoll, spriteMapWalkRight, spriteMapWalkLeft, spriteMapOpenChest, spriteMapAttack)
         val pink = Pink(spriteMapIdleMonster, spriteMapHurt, spriteMapDeath, spriteMapWalkRightMonster)
 
         val player = PlayerCharacter(
             doll.idleAnimation,
             doll.walkLeftAnimation,
-            doll.walkRightAnimation,
-            doll.attackAnimation
+            doll.walkRightAnimation
         ).apply {
             xy(200, 200)
         }
-
-        val chest1 = Chest(spriteMapChest)
-        var x = rand(20, 500)
-        var y = rand(70, 250)
-        val chest = ChestAnimate(chest1.idleAnimation).apply { xy(x, y) }
-        //playAnimation(spriteAnimation = chest.idleAnimation)
-        addChild(chest)
         addChild(player)
         player.addUpdater { time ->
             val scale = 16.milliseconds / time
@@ -75,9 +72,41 @@ class Play() : Scene() {
                 )
                 player.isAttacking = true
             }
+            if (input[MouseButton.RIGHT]) {
+                player.playAnimation(
+                    spriteAnimation = doll.openChestAnimation,
+                    times = 1,
+                    spriteDisplayTime = 100.milliseconds
+                )
+                player.isOpeningChest = true
+            }
+            player.handleKeys(keys, disp, doll.idleAnimation)
 
-            player.handleKeys(keys, disp, doll.idleAnimation, doll.attackAnimation)
         }
+
+//        val h = HealthAnimate(heart.idleAnimation).apply { xy(280, 10) }
+//        addChild(h)
+//        h.addUpdater { h.dying(heart.dyingAnimation, heart.deadAnimation, it) }
+        val offset = 35 //длина спрайта
+        var x = if (player.health % 2 == 0)
+            x0 - offset * player.health / 2
+        else
+            x0 - offset * (player.health + 1) / 2
+        //val lives = mutableListOf<HealthAnimate>()
+        val y = 10.0
+        for (allLives in 1..player.health) {
+            val live = HealthAnimate(heart.idleAnimation).apply {
+                xy(x, y)
+            }
+            addChild(live)
+            x += offset
+        }
+        val blueChest = Chest(spriteMapChest)
+        val chest =
+            ChestAnimate(blueChest.idleAnimation).apply { xy(rand(20, 450), rand(70, 250)) }
+        addChild(chest)
+        chest.onCollision({ it == player && player.isOpeningChest }) { chest.open(blueChest.openAnimation) }
+
         var numOfMonsters = 0
         val n = MyModule.level
         when (MyModule.level) {
@@ -85,42 +114,41 @@ class Play() : Scene() {
             2 -> numOfMonsters = 4
             3 -> numOfMonsters = 7
         }
-        var monsters = mutableListOf<Monster>()
+        val monsters = mutableListOf<Monster>()
 
-        if (MyModule.level == n) {
-            var winTime = 1000000.0
-            for (allMonsters in 1..numOfMonsters) {
-                var x = rand(20, 500)
-                var y = rand(70, 250)
-                val monster = Monster(pink.idleAnimation).apply {
-                    scale(2)
-                    xy(x, y)
+        var winTime = 1000000.0
+        for (allMonsters in 1..numOfMonsters) {
+            val x = rand(20, 500)
+            val y = rand(70, 250)
+            val monster = Monster(pink.idleAnimation).apply {
+                scale(2)
+                xy(x, y)
+            }
+            addChild(monster)
+            monsters.add(monster)
+            monster.addUpdater {
+                monster.animate(pink.idleAnimation, pink.walkAnimation, it)
+            }
+            monster.onCollision({ it == player && player.isAttacking }) {
+                monster.hurt(
+                    pink.hurtAnimation,
+                    pink.deathAnimation
+                )
+                player.isAttacking = false
+                monster.isHurt = false
+                if (monster.alive == 0) {
+                    monsters.remove(monster)
                 }
-                addChild(monster)
-                monsters.add(monster)
-                monster.addUpdater {
-                    monster.animate(pink.idleAnimation, pink.walkAnimation, it)
-                }
-                monster.onCollision({ it == player && player.isAttacking }) {
-                    monster.hurt(
-                        pink.hurtAnimation,
-                        pink.deathAnimation
-                    )
-                    player.isAttacking = false
-                    monster.isHurt = false
-                    if (monster.alive == 0) {
-                        monsters.remove(monster)
+                if (monsters.size == 0) {
+                    change = true
+                    MyModule.level = n + 1
+                    println(MyModule.level)
+//                    launch {
+//                        sceneContainer.changeTo<GameMenu>()
+//                    }
+                    var winText = text("YOU WIN", 50.0, Colors.BLACK, font) {
+                        position(views.virtualWidth / 2 - 70, views.virtualHeight / 2 - 140)
                     }
-                    if (monsters.size == 0) {
-                        change = true
-                        MyModule.level = n + 1
-                        println(MyModule.level)
-                        launch {
-                                sceneContainer.changeTo<GameMenu>()
-                        }
-//                        var winText = text("YOU WIN", 30.0, Colors.BLACK, font) {
-//                            position(views.virtualWidth / 2 - 70, views.virtualHeight / 2 - 140)
-//                        }
 //                        while (change && winTime >= 0) {
 //                            winTime -= 0.001
 //                        }
@@ -129,22 +157,19 @@ class Play() : Scene() {
 //                                sceneContainer.changeTo<GameMenu>()
 //                            }
 //                        }
-                    }
                 }
-
             }
 
         }
 
-
-        var menuButton = uiTextButton(100.0, 32.0) {
+        var menuButton = uiButton(100.0, 32.0) {
             text = "menu"
+            textFont = font
             position(0, 0)
             onClick {
                 sceneContainer.changeTo<GameMenu>()
             }
         }
-        //addUpdater { if (MyModule.level == n + 1) sceneContainer.changeTo<GameMenu>() }
     }
 }
 

@@ -11,10 +11,11 @@ data class KeyAssignment(
 
 class PlayerCharacter(
     idleAnimation: SpriteAnimation,
-    walkLeftAnimation: SpriteAnimation, walkRightAnimation: SpriteAnimation,
-    attackAnimation: SpriteAnimation
+    walkLeftAnimation: SpriteAnimation, walkRightAnimation: SpriteAnimation
 ) : Sprite(idleAnimation) {
+    var health = 3
     var isAttacking = false
+    var isOpeningChest = false
     //var notAttacking = true
     private val assignments = listOf(
         KeyAssignment(Key.A, walkLeftAnimation) { x -= it },
@@ -26,7 +27,7 @@ class PlayerCharacter(
     private var isMoving = false
 
 
-    fun handleKeys(inputKeys: InputKeys, disp: Double, idleAnimation: SpriteAnimation, attackAnimation: SpriteAnimation) {
+    fun handleKeys(inputKeys: InputKeys, disp: Double, idleAnimation: SpriteAnimation) {
         val anyMovement: Boolean = assignments // Iterate all registered movement keys
             .filter { inputKeys[it.key] } // Check if this movement key was pressed
             .onEach {
@@ -34,6 +35,7 @@ class PlayerCharacter(
                 it.block(disp)
                 playAnimation(it.animation, spriteDisplayTime = 100.milliseconds)
                 isAttacking = false
+                isOpeningChest = false
             }
             .any()
         //if (!isMoving) playAnimation(idleAnimation, spriteDisplayTime = 100.milliseconds)
