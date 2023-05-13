@@ -6,6 +6,8 @@ import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.onClick
 import com.soywiz.korge.view.tween.*
+import com.soywiz.korim.color.*
+import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
@@ -19,6 +21,7 @@ fun rand(start: Int, end: Int): Int {
 class Play() : Scene() {
     var change = false
     override suspend fun SContainer.sceneInit() {
+        val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
         val x0 = sceneContainer.width / 2
         val y0 = sceneContainer.height / 2
         var img = image(resourcesVfs["m_game_background_4.png"].readBitmap(), 0.5, 0.5) {
@@ -79,10 +82,13 @@ class Play() : Scene() {
         val n = MyModule.level
         when (MyModule.level) {
             1 -> numOfMonsters = 2
-            2 -> numOfMonsters = 5
+            2 -> numOfMonsters = 4
+            3 -> numOfMonsters = 7
         }
         var monsters = mutableListOf<Monster>()
+
         if (MyModule.level == n) {
+            var winTime = 1000000.0
             for (allMonsters in 1..numOfMonsters) {
                 var x = rand(20, 500)
                 var y = rand(70, 250)
@@ -110,14 +116,24 @@ class Play() : Scene() {
                         MyModule.level = n + 1
                         println(MyModule.level)
                         launch {
-                            sceneContainer.changeTo<GameMenu>()
+                                sceneContainer.changeTo<GameMenu>()
                         }
+//                        var winText = text("YOU WIN", 30.0, Colors.BLACK, font) {
+//                            position(views.virtualWidth / 2 - 70, views.virtualHeight / 2 - 140)
+//                        }
+//                        while (change && winTime >= 0) {
+//                            winTime -= 0.001
+//                        }
+//                        if (winTime < 0) {
+//                            launch {
+//                                sceneContainer.changeTo<GameMenu>()
+//                            }
+//                        }
                     }
                 }
 
             }
-            if (MyModule.level == n + 1) sceneContainer.changeTo<GameMenu>()
-            // println(MyModule.level)
+
         }
 
 
