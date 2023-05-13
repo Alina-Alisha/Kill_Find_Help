@@ -19,13 +19,15 @@ fun rand(start: Int, end: Int): Int {
 class Play() : Scene() {
     var change = false
     override suspend fun SContainer.sceneInit() {
-        //readImage("game_background_4.jpg")).dockedTo(Anchor.TOP_LEFT, ScaleMode.EXACT)
         val x0 = sceneContainer.width / 2
         val y0 = sceneContainer.height / 2
         var img = image(resourcesVfs["m_game_background_4.png"].readBitmap(), 0.5, 0.5) {
             x = x0
             y = y0
         }
+
+        val spriteMapChest = resourcesVfs["chest.png"].readBitmap()
+
         val spriteMapIdleDoll = resourcesVfs["doll/Idle.png"].readBitmap()
         val spriteMapWalkRight = resourcesVfs["doll/Walk_R.png"].readBitmap()
         val spriteMapWalkLeft = resourcesVfs["doll/Walk_L.png"].readBitmap()
@@ -49,6 +51,12 @@ class Play() : Scene() {
             xy(200, 200)
         }
 
+        val chest1 = Chest(spriteMapChest)
+        var x = rand(20, 500)
+        var y = rand(70, 250)
+        val chest = ChestAnimate(chest1.idleAnimation).apply { xy(x, y) }
+        //playAnimation(spriteAnimation = chest.idleAnimation)
+        addChild(chest)
         addChild(player)
         player.addUpdater { time ->
             val scale = 16.milliseconds / time
