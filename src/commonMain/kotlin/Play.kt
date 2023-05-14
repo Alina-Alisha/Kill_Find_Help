@@ -156,8 +156,8 @@ class Play() : Scene() {
 //                    launch {
 //                        sceneContainer.changeTo<GameMenu>()
 //                    }
-                    var winText = text("YOU WIN", 50.0, Colors.BLACK, font) {
-                        position(views.virtualWidth / 2 - 70, views.virtualHeight / 2 - 140)
+                    var winText = text("YOU WIN", 70.0, Colors.BLACK, font) {
+                        position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 60)
                     }
 //                        while (change && winTime >= 0) {
 //                            winTime -= 0.001

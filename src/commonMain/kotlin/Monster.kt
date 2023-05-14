@@ -16,9 +16,7 @@ class Monster(
     var back = true
     fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, delta: TimeSpan) {
         if (alive == 0)
-        {deadCooldown -= delta.seconds
-        println(delta)
-        }
+            deadCooldown -= delta.seconds
         if (deadCooldown < 0)
             parent?.removeChild(this)
         if (alive > 0 && !isHurt) {
