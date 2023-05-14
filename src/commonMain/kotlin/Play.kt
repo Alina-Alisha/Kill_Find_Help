@@ -33,8 +33,10 @@ class Play() : Scene() {
         val spriteMapIdleDoll = resourcesVfs["doll/Idle.png"].readBitmap()
         val spriteMapWalkRight = resourcesVfs["doll/Walk_R.png"].readBitmap()
         val spriteMapWalkLeft = resourcesVfs["doll/Walk_L.png"].readBitmap()
-        val spriteMapOpenChest = resourcesVfs["doll/chest_opening.png"].readBitmap()
-        val spriteMapAttack = resourcesVfs["doll/Attack_2.png"].readBitmap()
+        val spriteMapOpenChestRight = resourcesVfs["doll/chest_opening_R.png"].readBitmap()
+        val spriteMapOpenChestLeft = resourcesVfs["doll/chest_opening_L.png"].readBitmap()
+        val spriteMapAttackRight = resourcesVfs["doll/Attack_R.png"].readBitmap()
+        val spriteMapAttackLeft = resourcesVfs["doll/Attack_L.png"].readBitmap()
 
         val spriteMapIdleMonster = resourcesVfs["pink/Pink_Monster_Idle_4.png"].readBitmap()
         val spriteMapHurt = resourcesVfs["pink/Pink_Monster_Hurt_4.png"].readBitmap()
@@ -44,9 +46,18 @@ class Play() : Scene() {
         val spriteMapHeart = resourcesVfs["health.png"].readBitmap()
 
         val heart = Health(spriteMapHeart)
-
-        val doll = Doll(spriteMapIdleDoll, spriteMapWalkRight, spriteMapWalkLeft, spriteMapOpenChest, spriteMapAttack)
+        val doll = Doll(
+            spriteMapIdleDoll,
+            spriteMapWalkRight,
+            spriteMapWalkLeft,
+            spriteMapOpenChestRight,
+            spriteMapOpenChestLeft,
+            spriteMapAttackRight,
+            spriteMapAttackLeft
+        )
         val pink = Pink(spriteMapIdleMonster, spriteMapHurt, spriteMapDeath, spriteMapWalkRightMonster)
+        val loot = Loot(spriteMapRedPotion)
+        val blueChest = Chest(spriteMapChest)
 
         val player = PlayerCharacter(
             doll.idleAnimation,
@@ -60,11 +71,10 @@ class Play() : Scene() {
             val scale = 16.milliseconds / time
             val disp = 2 * scale
             val keys = views.input.keys
-
             val input = views.input
             if (input[MouseButton.LEFT]) {
                 player.playAnimation(
-                    spriteAnimation = doll.attackAnimation,
+                    spriteAnimation = doll.attackAnimationRight,
                     times = 1,
                     spriteDisplayTime = 100.milliseconds
                 )
@@ -72,7 +82,7 @@ class Play() : Scene() {
             }
             if (input[MouseButton.RIGHT]) {
                 player.playAnimation(
-                    spriteAnimation = doll.openChestAnimation,
+                    spriteAnimation = doll.openChestAnimationRight,
                     times = 1,
                     spriteDisplayTime = 100.milliseconds
                 )
@@ -94,8 +104,6 @@ class Play() : Scene() {
             }
         }
 
-        val loot = Loot(spriteMapRedPotion)
-        val blueChest = Chest(spriteMapChest)
         val chest =
             ChestAnimate(blueChest.idleAnimation, 1).apply { xy(rand(20, 450), rand(70, 250)) }
         addChild(chest)
