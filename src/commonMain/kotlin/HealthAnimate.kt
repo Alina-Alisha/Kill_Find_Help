@@ -7,7 +7,7 @@ class HealthAnimate(
     var alive = true
     private var lives = 3.0
     fun dying(dyingAnimation: SpriteAnimation, deadAnimation: SpriteAnimation, delta: TimeSpan) {
-        if (!alive) {
+        if (!alive && lives > 0) {
             playAnimation(spriteAnimation = dyingAnimation, spriteDisplayTime = 500.milliseconds)
             lives -= delta.seconds
         }

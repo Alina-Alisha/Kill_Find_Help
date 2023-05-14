@@ -16,7 +16,6 @@ fun rand(start: Int, end: Int): Int {
 }
 
 class Play() : Scene() {
-    var change = false
     override suspend fun SContainer.sceneInit() {
         val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
         val x0 = sceneContainer.width / 2
@@ -42,6 +41,7 @@ class Play() : Scene() {
         val spriteMapHurt = resourcesVfs["pink/Pink_Monster_Hurt_4.png"].readBitmap()
         val spriteMapDeath = resourcesVfs["pink/Pink_Monster_Death_8.png"].readBitmap()
         val spriteMapWalkRightMonster = resourcesVfs["pink/Pink_Monster_Walk_Right.png"].readBitmap()
+        val spriteMapMonsterAttack = resourcesVfs["pink/Pink_Monster_Attack1_4.png"].readBitmap()
 
         val spriteMapHeart = resourcesVfs["health.png"].readBitmap()
 
@@ -55,7 +55,7 @@ class Play() : Scene() {
             spriteMapAttackRight,
             spriteMapAttackLeft
         )
-        val pink = Pink(spriteMapIdleMonster, spriteMapHurt, spriteMapDeath, spriteMapWalkRightMonster)
+        val pink = Pink(spriteMapIdleMonster, spriteMapHurt, spriteMapDeath, spriteMapWalkRightMonster, spriteMapMonsterAttack)
         val loot = Loot(spriteMapRedPotion)
         val blueChest = Chest(spriteMapChest)
 
@@ -67,6 +67,97 @@ class Play() : Scene() {
             xy(200, 200)
         }
         addChild(player)
+        val lives = mutableListOf<HealthAnimate>()
+
+        val chest =
+            ChestAnimate(blueChest.idleAnimation, 1).apply { xy(rand(20, 450), rand(70, 250)) }
+        addChild(chest)
+        val redPotion = LootAnimate(loot.idleAnimation)
+        var a = chest.numOfLoot
+        chest.onCollision({ it == player && player.isOpeningChest }) {
+            chest.open(blueChest.openAnimation)
+            if (player.isOpeningChest) {
+                redPotion.apply {
+                    scale(1.5)
+                    xy(chest.x + 20, chest.y + 30)
+                }
+                addChild(redPotion)
+                redPotion.alive = true
+                redPotion.addUpdater {
+                    redPotion.animate(loot.idleAnimation, it)
+                }
+                if (a > 0) {
+                    player.health += chest.numOfLoot*10
+                    a--
+                }
+            }
+        }
+//отрисовка и логика здоровья
+        val offset = 35 //длина спрайта сердечка
+        val h = player.health/10
+        var x = if (h % 2 == 0)
+            x0 - offset * h / 2
+        else
+            x0 - offset * (h + 1) / 2
+        val y = 10.0
+        for (allLives in 1..h) {
+            val live = HealthAnimate(heart.idleAnimation).apply {
+                xy(x, y)
+            }
+            lives.add(live)
+            addChild(live)
+            x += offset
+            live.addUpdater { live.dying(heart.dyingAnimation, heart.deadAnimation, it) }
+        }
+//монстры
+        var numOfMonsters = 0
+        val n = MyModule.level
+        when (MyModule.level) {
+            1 -> numOfMonsters = 2
+            2 -> numOfMonsters = 4
+            3 -> numOfMonsters = 7
+        }
+        val monsters = mutableListOf<Monster>()
+
+        for (allMonsters in 1..numOfMonsters) {
+            val x = rand(20, 500)
+            val y = rand(70, 250)
+            val monster = Monster(pink.idleAnimation).apply {
+                scale(2)
+                xy(x, y)
+            }
+            addChild(monster)
+            monsters.add(monster)
+            monster.addUpdater {
+                monster.animate(pink.idleAnimation, pink.walkAnimation, pink.attackAnimation, it, Pair(player.x, player.y))
+                if (monster.isAttacking && player.health > 0) {
+                    player.health--
+                }
+                //println(player.health)
+            }
+            monster.onCollision({ it == player && player.isAttacking }) {
+                monster.hurt(
+                    pink.hurtAnimation,
+                    pink.deathAnimation
+                )
+                player.isAttacking = false
+                monster.isHurt = false
+                if (monster.alive == 0) {
+                    monsters.remove(monster)
+                }
+                if (monsters.size == 0) {
+                    MyModule.level = n + 1
+//                    launch {
+//                        sceneContainer.changeTo<GameMenu>()
+//                    }
+                    var winText = text("YOU WIN", 70.0, Colors.BLACK, font) {
+                        position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 60)
+                    }
+                }
+            }
+
+        }
+
         player.addUpdater { time ->
             val scale = 16.milliseconds / time
             val disp = 2 * scale
@@ -89,98 +180,16 @@ class Play() : Scene() {
                 player.isOpeningChest = true
             }
             player.handleKeys(keys, disp, doll.idleAnimation)
-            val offset = 35 //длина спрайта сердечка
-            var x = if (player.health % 2 == 0)
-                x0 - offset * player.health / 2
-            else
-                x0 - offset * (player.health + 1) / 2
-            val y = 10.0
-            for (allLives in 1..player.health) {
-                val live = HealthAnimate(heart.idleAnimation).apply {
-                    xy(x, y)
-                }
-                addChild(live)
-                x += offset
+            if (player.health % 10 == 0 && player.health < 30) {
+                lives[player.health/10].alive = false
             }
-        }
-
-        val chest =
-            ChestAnimate(blueChest.idleAnimation, 1).apply { xy(rand(20, 450), rand(70, 250)) }
-        addChild(chest)
-        val redPotion = LootAnimate(loot.idleAnimation)
-        var a = chest.numOfLoot
-        chest.onCollision({ it == player && player.isOpeningChest }) {
-            chest.open(blueChest.openAnimation)
-            if (player.isOpeningChest) {
-                redPotion.apply {
-                    scale(1.5)
-                    xy(chest.x + 20, chest.y + 30)
-                }
-                addChild(redPotion)
-                redPotion.alive = true
-                redPotion.addUpdater {
-                    redPotion.animate(loot.idleAnimation, it)
-                }
-                if (a > 0) {
-                    player.health += chest.numOfLoot
-                    println(player.health)
-                    a--
+            if (player.health == 0) {
+                var looseText = text("YOU ARE DEAD", 70.0, Colors.BLACK, font) {
+                    position(views.virtualWidth / 2 - 200, views.virtualHeight / 2 - 60)
                 }
             }
         }
 
-        var numOfMonsters = 0
-        val n = MyModule.level
-        when (MyModule.level) {
-            1 -> numOfMonsters = 2
-            2 -> numOfMonsters = 4
-            3 -> numOfMonsters = 7
-        }
-        val monsters = mutableListOf<Monster>()
-
-        for (allMonsters in 1..numOfMonsters) {
-            val x = rand(20, 500)
-            val y = rand(70, 250)
-            val monster = Monster(pink.idleAnimation).apply {
-                scale(2)
-                xy(x, y)
-            }
-            addChild(monster)
-            monsters.add(monster)
-            monster.addUpdater {
-                monster.animate(pink.idleAnimation, pink.walkAnimation, it)
-            }
-            monster.onCollision({ it == player && player.isAttacking }) {
-                monster.hurt(
-                    pink.hurtAnimation,
-                    pink.deathAnimation
-                )
-                player.isAttacking = false
-                monster.isHurt = false
-                if (monster.alive == 0) {
-                    monsters.remove(monster)
-                }
-                if (monsters.size == 0) {
-                    change = true
-                    MyModule.level = n + 1
-//                    launch {
-//                        sceneContainer.changeTo<GameMenu>()
-//                    }
-                    var winText = text("YOU WIN", 70.0, Colors.BLACK, font) {
-                        position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 60)
-                    }
-//                        while (change && winTime >= 0) {
-//                            winTime -= 0.001
-//                        }
-//                        if (winTime < 0) {
-//                            launch {
-//                                sceneContainer.changeTo<GameMenu>()
-//                            }
-//                        }
-                }
-            }
-
-        }
 
         var menuButton = uiButton(100.0, 32.0) {
             text = "menu"

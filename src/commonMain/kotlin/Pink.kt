@@ -5,7 +5,8 @@ class Pink(
     spriteMapIdle: Bitmap,
     spriteMapHurt: Bitmap,
     spriteMapDeath: Bitmap,
-    spriteMapWalkRightMonster: Bitmap
+    spriteMapWalkRightMonster: Bitmap,
+    spriteMapMonsterAttack: Bitmap
 ) {
 
     val idleAnimation = SpriteAnimation(
@@ -44,6 +45,18 @@ class Pink(
     )
     val walkAnimation = SpriteAnimation(
         spriteMap = spriteMapWalkRightMonster,
+        spriteWidth = 32,
+        spriteHeight = 32,
+        marginTop = 0,
+        marginLeft = 0,
+        columns = 4,
+        rows = 1,
+        offsetBetweenColumns = 0,
+        offsetBetweenRows = 0,
+    )
+
+    val attackAnimation = SpriteAnimation(
+        spriteMap = spriteMapMonsterAttack,
         spriteWidth = 32,
         spriteHeight = 32,
         marginTop = 0,

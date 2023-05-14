@@ -13,7 +13,7 @@ class PlayerCharacter(
     idleAnimation: SpriteAnimation,
     walkLeftAnimation: SpriteAnimation, walkRightAnimation: SpriteAnimation
 ) : Sprite(idleAnimation) {
-    var health = 3
+    var health = 30
     var isAttacking = false
     var isOpeningChest = false
 

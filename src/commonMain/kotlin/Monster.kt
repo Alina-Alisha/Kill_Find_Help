@@ -1,10 +1,6 @@
 import com.soywiz.klock.*
-import com.soywiz.korev.*
-import com.soywiz.korge.*
-import com.soywiz.korge.input.*
-import com.soywiz.korge.time.*
 import com.soywiz.korge.view.*
-import com.soywiz.korma.geom.*
+import kotlin.math.*
 
 class Monster(
     idleAnimation: SpriteAnimation
@@ -12,9 +8,11 @@ class Monster(
 
     var alive = 10
     var isHurt = false
-    var deadCooldown = 0.16
-    var back = true
-    fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, delta: TimeSpan) {
+    private var deadCooldown = 0.16
+    private var back = true
+    var isAttacking = false
+    var timeAttack = 1.0
+    fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, attackAnimation: SpriteAnimation, delta: TimeSpan, playerPosition: Pair<Double, Double>) {
         if (alive == 0)
             deadCooldown -= delta.seconds
         if (deadCooldown < 0)
@@ -27,9 +25,21 @@ class Monster(
                 x++
                 playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
             } else if (x > 50.0 && back) {
-                playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
+                playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds, reversed = true)
                 x--
             }
+            //преследование героя
+            if (abs(x-playerPosition.first) < 25.0 || abs(y-playerPosition.second) < 25.0) {
+                val dirX = playerPosition.first - x + 64
+                val dirY = playerPosition.second - y + 64
+                x += dirX/50
+                y += dirY/50
+                playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
+            }
+            if (abs(x-playerPosition.first) < 5.0 || abs(y-playerPosition.second) < 5.0) {
+                playAnimation(spriteAnimation = attackAnimation, spriteDisplayTime = 200.milliseconds)
+                isAttacking = true
+            } else isAttacking = false
         }
 
     }
