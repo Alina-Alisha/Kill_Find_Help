@@ -79,29 +79,28 @@ class Play() : Scene() {
                 player.isOpeningChest = true
             }
             player.handleKeys(keys, disp, doll.idleAnimation)
-
-        }
-
-        val offset = 35 //длина спрайта сердечка
-        var x = if (player.health % 2 == 0)
-            x0 - offset * player.health / 2
-        else
-            x0 - offset * (player.health + 1) / 2
-        val y = 10.0
-        for (allLives in 1..player.health) {
-            val live = HealthAnimate(heart.idleAnimation).apply {
-                xy(x, y)
+            val offset = 35 //длина спрайта сердечка
+            var x = if (player.health % 2 == 0)
+                x0 - offset * player.health / 2
+            else
+                x0 - offset * (player.health + 1) / 2
+            val y = 10.0
+            for (allLives in 1..player.health) {
+                val live = HealthAnimate(heart.idleAnimation).apply {
+                    xy(x, y)
+                }
+                addChild(live)
+                x += offset
             }
-            addChild(live)
-            x += offset
         }
 
         val loot = Loot(spriteMapRedPotion)
         val blueChest = Chest(spriteMapChest)
         val chest =
-            ChestAnimate(blueChest.idleAnimation).apply { xy(rand(20, 450), rand(70, 250)) }
+            ChestAnimate(blueChest.idleAnimation, 1).apply { xy(rand(20, 450), rand(70, 250)) }
         addChild(chest)
         val redPotion = LootAnimate(loot.idleAnimation)
+        var a = chest.numOfLoot
         chest.onCollision({ it == player && player.isOpeningChest }) {
             chest.open(blueChest.openAnimation)
             if (player.isOpeningChest) {
@@ -114,8 +113,12 @@ class Play() : Scene() {
                 redPotion.addUpdater {
                     redPotion.animate(loot.idleAnimation, it)
                 }
+                if (a > 0) {
+                    player.health += chest.numOfLoot
+                    println(player.health)
+                    a--
+                }
             }
-
         }
 
         var numOfMonsters = 0
@@ -152,7 +155,6 @@ class Play() : Scene() {
                 if (monsters.size == 0) {
                     change = true
                     MyModule.level = n + 1
-                    println(MyModule.level)
 //                    launch {
 //                        sceneContainer.changeTo<GameMenu>()
 //                    }
