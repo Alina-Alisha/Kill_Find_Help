@@ -111,11 +111,11 @@ class Play() : Scene() {
         }
 //монстры
         var numOfMonsters = 0
-        val n = MyModule.level
-        when (MyModule.level) {
+        val n = MyModule.event
+        when (MyModule.event) {
             1 -> numOfMonsters = 2
             2 -> numOfMonsters = 4
-            3 -> numOfMonsters = 7
+            3 -> numOfMonsters = 6
         }
         val monsters = mutableListOf<Monster>()
 

@@ -35,4 +35,5 @@ object MyModule : Module() {
     }
 
     var level = 1
+    var event = 1
 }

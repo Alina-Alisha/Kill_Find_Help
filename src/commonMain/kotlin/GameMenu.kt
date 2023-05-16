@@ -62,32 +62,40 @@ class GameMenu : Scene() {
                 this.buttonTextAlignment = TextAlignment.TOP_RIGHT
             }
             onClick {
+                MyModule.event = 1
                 sceneContainer.changeTo<Play>()
             }
         }
 
-//        var level2Button = uiButton(32.0, 32.0) {
-//            text = "kill 4 monsters        "
-//            textColor = Colors.BLACK
-//            textFont = font
-//            textSize = 20.0
-//            buttonBackColor = Colors["#bfa56a"]
-//            buttonTextAlignment = TextAlignment.TOP_RIGHT
-//            //uiSkinBitmap = paper
-//            //position(c.first, c.second)
-//            onClick {
-//                sceneContainer.changeTo<Play>()
-//            }
-//        }
+        var level2Button = uiButton(32.0, 32.0) {
+            text = "kill 6 monsters        "
+            textColor = Colors.BLACK
+            textFont = font
+            textSize = 20.0
+            buttonBackColor = Colors["#bfa56a"]
+            buttonTextAlignment = TextAlignment.TOP_RIGHT
+            //uiSkinBitmap = paper
+            //position(c.first, c.second)
+            onClick {
+                MyModule.event = 3
+                sceneContainer.changeTo<Play>()
+            }
+        }
 
         if (MyModule.level == 1) {
             val c = chooseSpace(availableSpaces)
             level1Button.addUpdater { position(c.first, c.second) }
-        } else if (MyModule.level == 2) {
+        } else if (MyModule.level >= 2) {
             availableSpaces[Pair(level1Button.x, level1Button.y)] = 0
-            val c = chooseSpace(availableSpaces)
+            var c = chooseSpace(availableSpaces)
             level1Button.text = "kill 4 monsters        "
+            level1Button.onClick {
+                MyModule.event = 2
+                sceneContainer.changeTo<Play>()
+            }
             level1Button.addUpdater { position(c.first, c.second) }
+            c = chooseSpace(availableSpaces) //почему когда создаём новую переменную, всё работает?
+            level2Button.addUpdater { position(c.first, c.second) }
         }
 
 
