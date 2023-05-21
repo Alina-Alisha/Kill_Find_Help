@@ -35,7 +35,6 @@ class PlayerCharacter(
     val idle = playAnimation(idleAnimation)
     val openChestRight = playAnimation(openChestRightAnimation)
     val openChestLeft = playAnimation(openChestLeftAnimation)
-    val walk = playAnimation(walkRightAnimation)
     val attackRight = playAnimation(attackRightAnimation)
     val attackLeft = playAnimation(attackLeftAnimation)
 
@@ -67,20 +66,15 @@ class PlayerCharacter(
                     this.scaleX = 1.0
                 }
                 it.block(disp)
-                walk
+                playAnimation(walkRightAnimation, spriteDisplayTime = 100.milliseconds)
                 direction = it.direction
                 isAttacking = false
                 isOpeningChest = false
             }
             .any()
 
-        if (isAttacking)
-            attackLeft
-        if (isOpeningChest)
-            openChestLeft
-
         if (anyMovement != isMoving) {
-            if (isMoving) playAnimationLooped(idleAnimation)
+            if (isMoving) playAnimationLooped(idleAnimation, spriteDisplayTime = 100.milliseconds)
             isMoving = anyMovement
         }
     }
