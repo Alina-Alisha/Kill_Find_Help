@@ -180,7 +180,7 @@ class Play() : Scene() {
                 )
                 player.isOpeningChest = true
             }
-            player.handleKeys(keys, disp, doll.idleAnimation)
+            player.handleKeys(keys, disp)
             if (player.health % 10 == 0 && player.health < 30) {
                 lives[player.health/10].alive = false
             }

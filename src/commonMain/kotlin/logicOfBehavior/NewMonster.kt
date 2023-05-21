@@ -4,13 +4,6 @@ import PlayerCharacter
 import com.soywiz.klock.*
 import com.soywiz.korge.time.*
 import com.soywiz.korge.view.*
-import kotlin.random.*
-
-
-fun rand(start: Int, end: Int): Int {
-    require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
-    return Random(System.nanoTime()).nextInt(end - start + 1) + start
-}
 
 class NewMonster(
     idleAnimation: SpriteAnimation,
@@ -84,15 +77,5 @@ class NewMonster(
         }
         idle
     }
-
-//    fun draw() {
-//        val x = rand(20, 500)
-//        val y = rand(70, 250)
-//        this.
-//    }
-
-//    fun update() {
-//
-//    }
 
 }

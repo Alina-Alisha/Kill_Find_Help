@@ -70,7 +70,7 @@ class GameView() : Scene() {
         val chest = ChestAnimate(blueChest.idleAnimation, 1)
         val redPotion = LootAnimate(loot.idleAnimation)
 
-        val manageMonsters = MonsterManager(sceneContainer, player, pink)
+        val monsterManager = MonsterManager(sceneContainer, player, pink)
 
         drawS(player)
         player.xy(200, 200)
@@ -80,6 +80,8 @@ class GameView() : Scene() {
         addChild(player)
         addChild(chest)
 
+        val playerManager = PlayerManager(sceneContainer, player)
+
         var numOfMonsters = 0
         when (MyModule.event) {
             1 -> numOfMonsters = 2
@@ -87,12 +89,13 @@ class GameView() : Scene() {
             3 -> numOfMonsters = 6
         }
 
-        manageMonsters.creatingMonsters(numOfMonsters)
-        manageMonsters.drawMonsters()
+        monsterManager.creatingMonsters(numOfMonsters)
+        monsterManager.drawMonsters()
 
 
         fun update() {
-            manageMonsters.update()
+            monsterManager.update()
+            playerManager.update()
         }
 
         addUpdater {

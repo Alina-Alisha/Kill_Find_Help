@@ -5,7 +5,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korio.async.*
 import com.soywiz.korma.geom.*
 
-class MonsterManager(private val scene: SceneContainer, private val player: PlayerCharacter, val pink: Pink) {
+class MonsterManager(private val scene: SceneContainer, private val player: PlayerCharacter, private val pink: Pink) {
 
     private val monsters = mutableListOf<NewMonster>()
 
@@ -44,7 +44,6 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
 
     fun update() {
         monsters.forEach { monster ->
-            //monster.update()
 
             monster.onCollision({ it == player && player.isAttacking }) {
                 monster.takeDamage(player.power)
@@ -63,7 +62,7 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
 
     fun drawMonsters() {
         monsters.forEach { monster ->
-            monster.xy(logicOfBehavior.rand(20, 500), logicOfBehavior.rand(70, 250))
+            monster.xy(rand(20, 500), rand(70, 250))
             monster.scale(2)
             drawS(monster)
             scene.addChild(monster)
