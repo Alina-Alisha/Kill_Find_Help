@@ -4,6 +4,7 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korge.view.*
 import com.soywiz.korio.async.*
 import com.soywiz.korma.geom.*
+import screens.*
 
 class MonsterManager(private val scene: SceneContainer, private val player: PlayerCharacter, private val pink: Pink) {
 

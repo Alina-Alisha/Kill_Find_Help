@@ -10,7 +10,7 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
-import kotlin.random.*
+import screens.*
 
 class Play() : Scene() {
     override suspend fun SContainer.sceneInit() {
@@ -149,7 +149,7 @@ class Play() : Scene() {
                 if (monsters.size == 0) {
                     MyModule.level = n + 1
 //                    launch {
-//                        sceneContainer.changeTo<GameMenu>()
+//                        sceneContainer.changeTo<screens.GameMenu>()
 //                    }
                     var winText = text("YOU WIN", 70.0, Colors.BLACK, font) {
                         position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 60)

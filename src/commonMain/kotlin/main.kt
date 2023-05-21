@@ -17,6 +17,7 @@ import com.soywiz.korge.component.docking.*
 import com.soywiz.korge.internal.*
 import com.soywiz.korge.service.*
 import com.soywiz.korinject.*
+import screens.*
 
 
 @OptIn(KorgeUntested::class)

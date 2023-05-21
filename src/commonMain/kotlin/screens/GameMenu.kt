@@ -1,3 +1,6 @@
+package screens
+
+import MyModule
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.ui.*
@@ -102,7 +105,7 @@ class GameMenu : Scene() {
         }
 
 //        if (MyModule.level == 2) {
-//            val c = chooseSpace(availableSpaces)
+//            val c = screens.chooseSpace(availableSpaces)
 //            level2Button.addUpdater { position(c.first, c.second) }
 //        }
 //        else availableSpaces[Pair(level2Button.x, level2Button.y)] = 0

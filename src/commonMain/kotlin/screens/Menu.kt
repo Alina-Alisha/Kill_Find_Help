@@ -1,3 +1,5 @@
+package screens
+
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.ui.*
@@ -6,6 +8,7 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import screens.*
 
 class Menu() : Scene() {
     override suspend fun SContainer.sceneInit() {

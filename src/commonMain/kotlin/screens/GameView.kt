@@ -1,10 +1,14 @@
+package screens
+
+import MonsterManager
+import MyModule
+import PlayerCharacter
+import PlayerManager
 import animate.*
 import logicOfBehavior.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.view.*
-import com.soywiz.korim.color.*
 import com.soywiz.korim.format.*
-import com.soywiz.korim.vector.*
 import com.soywiz.korio.file.std.*
 
 
