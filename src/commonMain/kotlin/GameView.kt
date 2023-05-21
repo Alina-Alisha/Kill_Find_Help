@@ -98,10 +98,6 @@ class GameView() : Scene() {
             playerManager.update()
         }
 
-        addUpdater {
-            update()
-        }
-
-
+        update()
     }
 }

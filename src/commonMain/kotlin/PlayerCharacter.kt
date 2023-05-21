@@ -7,7 +7,6 @@ enum class Direction {
 }
 data class KeyAssignment(
     val key: Key,
-    val animation: SpriteAnimation,
     var direction: Direction,
     val block: (Double) -> Unit
 )
@@ -33,22 +32,21 @@ class PlayerCharacter(
     var isOpeningChest = false
     var power = 1
 
-//    val idle = playAnimation(idleAnimation)
-//    val openChestRight = playAnimation(openChestRightAnimation)
-//    val openChestLeft = playAnimation(openChestLeftAnimation)
-//    val walkRight = playAnimation(walkRightAnimation)
-//    val walkLeft = playAnimation(walkLeftAnimation)
-//    val attackRight = playAnimation(attackRightAnimation)
-//    val attackLeft = playAnimation(attackLeftAnimation)
+    val idle = playAnimation(idleAnimation)
+    val openChestRight = playAnimation(openChestRightAnimation)
+    val openChestLeft = playAnimation(openChestLeftAnimation)
+    val walk = playAnimation(walkRightAnimation)
+    val attackRight = playAnimation(attackRightAnimation)
+    val attackLeft = playAnimation(attackLeftAnimation)
 
     private var lastAnimation = walkLeftAnimation
     private var direction = Direction.LEFT
 
     private val keyAssignments = listOf(
-        KeyAssignment(Key.A, walkLeftAnimation, Direction.LEFT) { x -= it },
-        KeyAssignment(Key.D, walkRightAnimation, Direction.RIGHT) { x += it },
-        KeyAssignment(Key.W, lastAnimation, direction) { y -= it },
-        KeyAssignment(Key.S, lastAnimation, direction) { y += it },
+        KeyAssignment(Key.A, Direction.LEFT) { x -= it },
+        KeyAssignment(Key.D, Direction.RIGHT) { x += it },
+        KeyAssignment(Key.W, direction) { y -= it },
+        KeyAssignment(Key.S, direction) { y += it },
     )
 
     private val mouseAssignments = listOf(
@@ -62,14 +60,24 @@ class PlayerCharacter(
         val anyMovement: Boolean = keyAssignments
             .filter { inputKeys[it.key] }
             .onEach {
+                if (direction == Direction.LEFT) { //поправить телепортацию из-за отражения
+                    this.scaleX = -1.0
+                }
+                else {
+                    this.scaleX = 1.0
+                }
                 it.block(disp)
-                playAnimation(it.animation, spriteDisplayTime = 100.milliseconds)
-                lastAnimation = it.animation
+                walk
                 direction = it.direction
                 isAttacking = false
                 isOpeningChest = false
             }
             .any()
+
+        if (isAttacking)
+            attackLeft
+        if (isOpeningChest)
+            openChestLeft
 
         if (anyMovement != isMoving) {
             if (isMoving) playAnimationLooped(idleAnimation)
@@ -77,21 +85,26 @@ class PlayerCharacter(
         }
     }
 
-    fun mouseEvents(input: Input) {
-        val anyMovement: Boolean = mouseAssignments
+    fun mouseEvents(input: Input, disp: Double) {
+        var anyMovement: Boolean = mouseAssignments
             .filter { input[it.key] }
             .onEach {
-                playAnimation(it.animation, spriteDisplayTime = 100.milliseconds)
+                if (direction == Direction.LEFT)
+                    this.scaleX = -1.0
+                else
+                    this.scaleX = 1.0
+                playAnimationForDuration(0.7.seconds, it.animation, spriteDisplayTime = 100.milliseconds)
                 lastAnimation = it.animation
                 isAttacking = false
                 isOpeningChest = false
+                setFrame(100)
             }
             .any()
 
-        if (anyMovement != isMoving) {
-            if (isMoving) playAnimationLooped(idleAnimation)
-            isMoving = anyMovement
-        }
+//        if (anyMovement != isMoving) {
+//            if (isMoving) playAnimationLooped(idleAnimation, spriteDisplayTime = 200.milliseconds)
+//            isMoving = anyMovement
+//        }
     }
 
 }

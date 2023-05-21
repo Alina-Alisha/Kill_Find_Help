@@ -16,7 +16,6 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
             if (monster.health <= 0) {
                 monsters.remove(monster)
                 monster.removeFromParent()
-                return@addUpdater
             }
             if (monster.distanceTo(player) <= 90) {
                 scene.launch {
