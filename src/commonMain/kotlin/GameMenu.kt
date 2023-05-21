@@ -7,8 +7,12 @@ import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korim.text.*
 import com.soywiz.korio.file.std.*
+import kotlin.random.*
 
-
+fun rand(start: Int, end: Int): Int {
+    require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
+    return Random(System.nanoTime()).nextInt(end - start + 1) + start
+}
 fun chooseSpace(availableSpaces: MutableMap<Pair<Double, Double>, Int>): Pair<Double, Double> {
     val h = rand(0, 5)
     val y = 89.0 + 36.0 * h
@@ -44,7 +48,6 @@ class GameMenu : Scene() {
             Pair(420.0, 161.0) to 0,
             Pair(420.0, 197.0) to 0,
             Pair(420.0, 233.0) to 0,
-            Pair(420.0, 269.0) to 1
         )
 
         var titleText = text("Available jobs", 30.0, Colors.WHITE, font) {
@@ -63,7 +66,7 @@ class GameMenu : Scene() {
             }
             onClick {
                 MyModule.event = 1
-                sceneContainer.changeTo<Play>()
+                sceneContainer.changeTo<GameView>()
             }
         }
 
@@ -78,7 +81,7 @@ class GameMenu : Scene() {
             //position(c.first, c.second)
             onClick {
                 MyModule.event = 3
-                sceneContainer.changeTo<Play>()
+                sceneContainer.changeTo<GameView>()
             }
         }
 
@@ -87,17 +90,16 @@ class GameMenu : Scene() {
             level1Button.addUpdater { position(c.first, c.second) }
         } else if (MyModule.level >= 2) {
             availableSpaces[Pair(level1Button.x, level1Button.y)] = 0
-            var c = chooseSpace(availableSpaces)
+            val c = chooseSpace(availableSpaces)
             level1Button.text = "kill 4 monsters        "
             level1Button.onClick {
                 MyModule.event = 2
-                sceneContainer.changeTo<Play>()
+                sceneContainer.changeTo<GameView>()
             }
             level1Button.addUpdater { position(c.first, c.second) }
-            c = chooseSpace(availableSpaces) //почему когда создаём новую переменную, всё работает?
-            level2Button.addUpdater { position(c.first, c.second) }
+            val a = chooseSpace(availableSpaces) //почему когда создаём новую переменную, всё работает?
+            level2Button.addUpdater { position(a.first, a.second) }
         }
-
 
 //        if (MyModule.level == 2) {
 //            val c = chooseSpace(availableSpaces)

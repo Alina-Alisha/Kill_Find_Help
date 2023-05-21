@@ -30,8 +30,9 @@ object MyModule : Module() {
 
     override suspend fun AsyncInjector.configure() {
         mapPrototype { Menu() }
-        mapPrototype { Play() }
+        mapPrototype { GameView() }
         mapPrototype { GameMenu() }
+        //mapPrototype { Play() }
     }
 
     var level = 1

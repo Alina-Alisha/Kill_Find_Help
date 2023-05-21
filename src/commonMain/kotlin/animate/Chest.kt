@@ -1,3 +1,5 @@
+package animate
+
 import com.soywiz.korim.bitmap.*
 
 class Chest(spriteMapChest: Bitmap) {

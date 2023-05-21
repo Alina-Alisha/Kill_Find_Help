@@ -1,3 +1,5 @@
+package logicOfBehavior
+
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
 

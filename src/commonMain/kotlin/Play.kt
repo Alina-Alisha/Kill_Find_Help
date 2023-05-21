@@ -1,3 +1,5 @@
+import logicOfBehavior.*
+import animate.*
 import com.soywiz.klock.*
 import com.soywiz.korev.*
 import com.soywiz.korge.input.*
@@ -9,11 +11,6 @@ import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
 import kotlin.random.*
-
-fun rand(start: Int, end: Int): Int {
-    require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
-    return Random(System.nanoTime()).nextInt(end - start + 1) + start
-}
 
 class Play() : Scene() {
     override suspend fun SContainer.sceneInit() {
@@ -62,7 +59,11 @@ class Play() : Scene() {
         val player = PlayerCharacter(
             doll.idleAnimation,
             doll.walkLeftAnimation,
-            doll.walkRightAnimation
+            doll.walkRightAnimation,
+            doll.openChestAnimationRight,
+            doll.openChestAnimationLeft,
+            doll.attackAnimationRight,
+            doll.attackAnimationLeft
         ).apply {
             xy(200, 200)
         }
@@ -129,7 +130,7 @@ class Play() : Scene() {
             addChild(monster)
             monsters.add(monster)
             monster.addUpdater {
-                monster.animate(pink.idleAnimation, pink.walkAnimation, pink.attackAnimation, it, Pair(player.x, player.y))
+                monster.animate(pink.idleAnimation, pink.walkAnimation, pink.attackAnimation, it, player)
                 if (monster.isAttacking && player.health > 0) {
                     player.health--
                 }

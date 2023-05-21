@@ -1,3 +1,5 @@
+package animate
+
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.*
 

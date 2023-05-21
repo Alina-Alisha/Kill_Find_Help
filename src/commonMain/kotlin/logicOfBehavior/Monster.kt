@@ -1,6 +1,9 @@
+package logicOfBehavior
+
+import PlayerCharacter
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
-import kotlin.math.*
+import com.soywiz.korma.geom.*
 
 class Monster(
     idleAnimation: SpriteAnimation
@@ -11,12 +14,19 @@ class Monster(
     private var deadCooldown = 0.16
     private var back = true
     var isAttacking = false
-    var timeAttack = 1.0
-    fun animate(idleAnimation: SpriteAnimation, walkAnimation: SpriteAnimation, attackAnimation: SpriteAnimation, delta: TimeSpan, playerPosition: Pair<Double, Double>) {
+    var timeAttack = DateTime.now()
+    var lastTimeAttack = DateTime.now()
+    fun animate(
+        idleAnimation: SpriteAnimation,
+        walkAnimation: SpriteAnimation,
+        attackAnimation: SpriteAnimation,
+        delta: TimeSpan,
+        player: PlayerCharacter
+    ) {
         if (alive == 0)
             deadCooldown -= delta.seconds
         if (deadCooldown < 0)
-            parent?.removeChild(this)
+            removeFromParent()
         if (alive > 0 && !isHurt) {
             playAnimation(spriteAnimation = idleAnimation, spriteDisplayTime = 200.milliseconds)
             if (x == 50.0) back = false
@@ -29,16 +39,23 @@ class Monster(
                 x--
             }
             //преследование героя
-            if (abs(x-playerPosition.first) < 25.0 || abs(y-playerPosition.second) < 25.0) {
-                val dirX = playerPosition.first - x + 64
-                val dirY = playerPosition.second - y + 64
-                x += dirX/50
-                y += dirY/50
+            //println(IPoint(x, y).distanceTo(IPoint(playerPosition.first, playerPosition.second)))
+            if (this.distanceTo(player) < 70.5) {
+                val dirX = player.x - x + 64
+                val dirY = player.y - y + 64
+                x += dirX / 100
+                y += dirY / 100
                 playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
             }
-            if (abs(x-playerPosition.first) < 5.0 || abs(y-playerPosition.second) < 5.0) {
-                playAnimation(spriteAnimation = attackAnimation, spriteDisplayTime = 200.milliseconds)
-                isAttacking = true
+            if (this.distanceTo(player) < 45.0) {
+                timeAttack = DateTime.now()
+                println(timeAttack - lastTimeAttack)
+                if (timeAttack - lastTimeAttack >= TimeSpan(10000.0)) {
+                    playAnimation(spriteAnimation = attackAnimation, spriteDisplayTime = 200.milliseconds)
+                    isAttacking = true
+                    lastTimeAttack = timeAttack
+                }
+                else isAttacking = false
             } else isAttacking = false
         }
 
