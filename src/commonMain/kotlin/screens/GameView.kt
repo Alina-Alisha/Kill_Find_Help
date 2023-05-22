@@ -2,7 +2,7 @@ package screens
 
 import MonsterManager
 import MyModule
-import PlayerCharacter
+import logicOfBehavior.PlayerCharacter
 import PlayerManager
 import animate.*
 import logicOfBehavior.*
@@ -67,7 +67,7 @@ class GameView() : Scene() {
             doll.deadAnimation,
             doll.walkRightAnimation,
             1,
-            50,
+            5.0,
             doll.openChestAnimationRight,
             doll.attackAnimationRight
         )

@@ -1,3 +1,5 @@
+package logicOfBehavior
+
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
 
@@ -14,7 +16,7 @@ open class Character(
     open val deathAnimation: SpriteAnimation,
     open val walkAnimation: SpriteAnimation,
     open val damage: Int,
-    open var health: Int
+    open var health: Double
 ): Sprite(idleAnimation) {
     open var isAttacking = false
     open var directionX = DirectionX.LEFT
@@ -32,16 +34,16 @@ open class Character(
         }
     }
 
-    open fun takeDamage(damage: Int) {
+    open fun takeDamage(damage: Double) {
         health -= damage
         if (health <= 0) {
-            die(TimeSpan(0.5))
+            die(TimeSpan(2.2))
         }
     }
 
     fun die(delta: TimeSpan) {
         if (deadCooldown > 0) {
-            playAnimation(deathAnimation)
+            playAnimation(deathAnimation, spriteDisplayTime = 200.milliseconds)
             deadCooldown -= delta.seconds
             isDead = true
         } else removeFromParent()

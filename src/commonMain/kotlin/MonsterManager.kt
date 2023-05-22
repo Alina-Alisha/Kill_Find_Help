@@ -1,7 +1,9 @@
 import animate.*
+import com.soywiz.klock.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.*
+import logicOfBehavior.*
 import screens.*
 
 class MonsterManager(private val scene: SceneContainer, private val player: PlayerCharacter, private val pink: Pink) {
@@ -20,7 +22,7 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
                 pink.deathAnimation,
                 pink.walkAnimation,
                 1,
-                40,
+                40.0,
                 pink.hurtAnimation,
                 pink.attackAnimation,
             )
@@ -31,6 +33,7 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
     fun update() {
         monsters.forEach { monster ->
             monster.addUpdater {
+                monster.playAnimation(monster.idleAnimation, spriteDisplayTime = 100.milliseconds)
                 if (monster.isDead) {
                     monsters.remove(monster)
                     monster.removeFromParent()
@@ -39,6 +42,8 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
                     monster.walkTo(player.x, player.y)
                     if (monster.distanceTo(player) <= 50) {
                         monster.attack(player)
+                        player.takeDamage(0.01)
+                        println(player.health)
                     }
                 }
             }

@@ -1,4 +1,5 @@
-import animate.*
+package logicOfBehavior
+
 import com.soywiz.klock.*
 import com.soywiz.korev.*
 import com.soywiz.korge.input.*
@@ -22,13 +23,13 @@ class PlayerCharacter(
     override val deathAnimation: SpriteAnimation,
     override val walkAnimation: SpriteAnimation,
     override val damage: Int,
-    override var health: Int,
+    override var health: Double,
     openChestAnimation: SpriteAnimation,
     attackAnimation: SpriteAnimation
 ) : Character(idleAnimation, deathAnimation, walkAnimation, damage, health) {
     override var isAttacking = false
     var isOpeningChest = false
-    var power = 1
+    var power = 1.0
     override var directionX = DirectionX.LEFT
 
     private val keyAssignments = listOf(

@@ -1,3 +1,5 @@
+package logicOfBehavior
+
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
 
@@ -6,7 +8,7 @@ class NewMonster(
     override val deathAnimation: SpriteAnimation,
     override val walkAnimation: SpriteAnimation,
     override val damage: Int,
-    override var health: Int,
+    override var health: Double,
     private val hurtAnimation: SpriteAnimation,
     private val attackAnimation: SpriteAnimation
 ) : Character(idleAnimation, deathAnimation, walkAnimation, damage, health) {
@@ -24,14 +26,14 @@ class NewMonster(
     fun attack(target: PlayerCharacter) {
         timeAttack = DateTime.now()
         if (timeAttack - lastTimeAttack > TimeSpan(1000.0)) {
-            playAnimationForDuration(1.seconds, attackAnimation, spriteDisplayTime = 150.milliseconds)
+            playAnimationForDuration(2.seconds, attackAnimation, spriteDisplayTime = 150.milliseconds)
             target.health - damage
             lastTimeAttack = timeAttack
             isAttacking = true
         } else isAttacking = false
     }
 
-    override fun takeDamage(damage: Int) {
+    override fun takeDamage(damage: Double) {
         health -= damage
         if (health <= 0) {
             die(TimeSpan(0.5))
@@ -58,11 +60,8 @@ class NewMonster(
         }
         dirX += if (directionX == DirectionX.RIGHT) 28 else -28
         dirY += if (directionY == DirectionY.DOWN) 36 else -36
-        println("" + dirX + dirY)
         x += dirX / 100 //* if (direction == Direction.RIGHT) 1 else -1
         y += dirY / 100 //* if (direction == Direction.RIGHT) 1 else -1
-        //x += 2 * if (direction == Direction.RIGHT) 1 else -1
-
     }
 
 }

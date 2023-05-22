@@ -1,6 +1,5 @@
 package logicOfBehavior
 
-import PlayerCharacter
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.*
