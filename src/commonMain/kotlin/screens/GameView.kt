@@ -38,7 +38,7 @@ class GameView() : Scene() {
         val spriteMapOpenChestRight = resourcesVfs["doll/chest_opening_R.png"].readBitmap()
         val spriteMapOpenChestLeft = resourcesVfs["doll/chest_opening_L.png"].readBitmap()
         val spriteMapAttackRight = resourcesVfs["doll/Attack_R.png"].readBitmap()
-        val spriteMapAttackLeft = resourcesVfs["doll/Attack_L.png"].readBitmap()
+        val spriteMapDead = resourcesVfs["doll/Dead.png"].readBitmap()
 
         val spriteMapIdleMonster = resourcesVfs["pink/Pink_Monster_Idle_4.png"].readBitmap()
         val spriteMapHurt = resourcesVfs["pink/Pink_Monster_Hurt_4.png"].readBitmap()
@@ -55,7 +55,7 @@ class GameView() : Scene() {
             spriteMapOpenChestRight,
             spriteMapOpenChestLeft,
             spriteMapAttackRight,
-            spriteMapAttackLeft
+            spriteMapDead
         )
         val pink =
             Pink(spriteMapIdleMonster, spriteMapHurt, spriteMapDeath, spriteMapWalkRightMonster, spriteMapMonsterAttack)
@@ -64,12 +64,12 @@ class GameView() : Scene() {
 
         val player = PlayerCharacter(
             doll.idleAnimation,
-            doll.walkLeftAnimation,
+            doll.deadAnimation,
             doll.walkRightAnimation,
+            1,
+            50,
             doll.openChestAnimationRight,
-            doll.openChestAnimationLeft,
-            doll.attackAnimationRight,
-            doll.attackAnimationLeft
+            doll.attackAnimationRight
         )
         val chest = ChestAnimate(blueChest.idleAnimation, 1)
         val redPotion = LootAnimate(loot.idleAnimation)

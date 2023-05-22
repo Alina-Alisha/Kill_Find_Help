@@ -10,12 +10,12 @@ class Doll(
     spriteMapOpenChestRight: Bitmap,
     spriteMapOpenChestLeft: Bitmap,
     spriteMapAttackRight: Bitmap,
-    spriteMapAttackLeft: Bitmap
+    spriteMapDead: Bitmap
 ) {
     val idleAnimation = SpriteAnimation(
         spriteMap = spriteMapIdle,
-        spriteWidth = 128,
-        spriteHeight = 128,
+        spriteWidth = 56,
+        spriteHeight = 73,
         marginTop = 0,
         marginLeft = 0,
         columns = 5,
@@ -26,8 +26,8 @@ class Doll(
 
     val walkRightAnimation = SpriteAnimation(
         spriteMap = spriteMapWalkRight,
-        spriteWidth = 128,
-        spriteHeight = 128,
+        spriteWidth = 56,
+        spriteHeight = 73,
         marginTop = 0,
         marginLeft = 0,
         columns = 5,
@@ -49,7 +49,7 @@ class Doll(
     val openChestAnimationRight = SpriteAnimation(
         spriteMap = spriteMapOpenChestRight,
         spriteWidth = 128,
-        spriteHeight = 128,
+        spriteHeight = 73,
         marginTop = 0,
         marginLeft = 0,
         columns = 10,
@@ -71,7 +71,7 @@ class Doll(
     val attackAnimationRight = SpriteAnimation(
         spriteMap = spriteMapAttackRight,
         spriteWidth = 128,
-        spriteHeight = 128,
+        spriteHeight = 73,
         marginTop = 0,
         marginLeft = 0,
         columns = 3,
@@ -79,13 +79,13 @@ class Doll(
         offsetBetweenColumns = 0,
         offsetBetweenRows = 0,
     )
-    val attackAnimationLeft = SpriteAnimation(
-        spriteMap = spriteMapAttackLeft,
+    val deadAnimation = SpriteAnimation(
+        spriteMap = spriteMapDead,
         spriteWidth = 128,
-        spriteHeight = 128,
+        spriteHeight = 76,
         marginTop = 0,
         marginLeft = 0,
-        columns = 3,
+        columns = 5,
         rows = 1,
         offsetBetweenColumns = 0,
         offsetBetweenRows = 0,

@@ -11,7 +11,7 @@ class PlayerManager(private val scene: SceneContainer, private val player: Playe
             val input = scene.views.input
 
             player.handleKeys(keys, disp)
-            player.mouseEvents(input, disp)
+            player.mouseEvents(input)
         }
     }
 }

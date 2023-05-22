@@ -1,56 +1,46 @@
+import animate.*
 import com.soywiz.klock.*
 import com.soywiz.korev.*
 import com.soywiz.korge.input.*
 import com.soywiz.korge.view.*
-enum class Direction {
-    RIGHT, LEFT
-}
+
 data class KeyAssignment(
     val key: Key,
-    var direction: Direction,
+    var direction: DirectionX,
     val block: (Double) -> Unit
 )
 
 data class MouseAssignment(
     val key: MouseButton,
     val animation: SpriteAnimation,
-    var direction: Direction
-    //val block: (Double) -> Unit
+    var isAttacking: Boolean,
+    var isOpeningChest: Boolean
 )
 
 class PlayerCharacter(
-    val idleAnimation: SpriteAnimation,
-    val walkLeftAnimation: SpriteAnimation,
-    val walkRightAnimation: SpriteAnimation,
-    val openChestRightAnimation: SpriteAnimation,
-    val openChestLeftAnimation: SpriteAnimation,
-    val attackRightAnimation: SpriteAnimation,
-    val attackLeftAnimation: SpriteAnimation
-) : Sprite(idleAnimation) {
-    var health = 30
-    var isAttacking = false
+    override val idleAnimation: SpriteAnimation,
+    override val deathAnimation: SpriteAnimation,
+    override val walkAnimation: SpriteAnimation,
+    override val damage: Int,
+    override var health: Int,
+    openChestAnimation: SpriteAnimation,
+    attackAnimation: SpriteAnimation
+) : Character(idleAnimation, deathAnimation, walkAnimation, damage, health) {
+    override var isAttacking = false
     var isOpeningChest = false
     var power = 1
-
-    val idle = playAnimation(idleAnimation)
-    val openChestRight = playAnimation(openChestRightAnimation)
-    val openChestLeft = playAnimation(openChestLeftAnimation)
-    val attackRight = playAnimation(attackRightAnimation)
-    val attackLeft = playAnimation(attackLeftAnimation)
-
-    private var lastAnimation = walkLeftAnimation
-    private var direction = Direction.LEFT
+    override var directionX = DirectionX.LEFT
 
     private val keyAssignments = listOf(
-        KeyAssignment(Key.A, Direction.LEFT) { x -= it },
-        KeyAssignment(Key.D, Direction.RIGHT) { x += it },
-        KeyAssignment(Key.W, direction) { y -= it },
-        KeyAssignment(Key.S, direction) { y += it },
+        KeyAssignment(Key.A, DirectionX.LEFT) { x -= it },
+        KeyAssignment(Key.D, DirectionX.RIGHT) { x += it },
+        KeyAssignment(Key.W, DirectionX.NONE) { y -= it },
+        KeyAssignment(Key.S, DirectionX.NONE) { y += it }
     )
 
     private val mouseAssignments = listOf(
-        MouseAssignment(MouseButton.LEFT, attackRightAnimation, direction),
-        MouseAssignment(MouseButton.RIGHT, openChestRightAnimation, direction)
+        MouseAssignment(MouseButton.LEFT, attackAnimation, true, false),
+        MouseAssignment(MouseButton.RIGHT, openChestAnimation, false, true)
     )
 
     private var isMoving = false
@@ -59,15 +49,12 @@ class PlayerCharacter(
         val anyMovement: Boolean = keyAssignments
             .filter { inputKeys[it.key] }
             .onEach {
-                if (direction == Direction.LEFT) { //поправить телепортацию из-за отражения
-                    this.scaleX = -1.0
-                }
-                else {
-                    this.scaleX = 1.0
+                if (it.direction != directionX && it.direction != DirectionX.NONE) {
+                    flipSprite(this)
+                    directionX = it.direction
                 }
                 it.block(disp)
-                playAnimation(walkRightAnimation, spriteDisplayTime = 100.milliseconds)
-                direction = it.direction
+                playAnimation(walkAnimation, spriteDisplayTime = 100.milliseconds)
                 isAttacking = false
                 isOpeningChest = false
             }
@@ -79,26 +66,15 @@ class PlayerCharacter(
         }
     }
 
-    fun mouseEvents(input: Input, disp: Double) {
+    fun mouseEvents(input: Input) {
         var anyMovement: Boolean = mouseAssignments
             .filter { input[it.key] }
             .onEach {
-                if (direction == Direction.LEFT)
-                    this.scaleX = -1.0
-                else
-                    this.scaleX = 1.0
                 playAnimationForDuration(0.7.seconds, it.animation, spriteDisplayTime = 100.milliseconds)
-                lastAnimation = it.animation
-                isAttacking = false
-                isOpeningChest = false
-                setFrame(100)
+                isAttacking = it.isAttacking
+                isOpeningChest = it.isOpeningChest
             }
             .any()
-
-//        if (anyMovement != isMoving) {
-//            if (isMoving) playAnimationLooped(idleAnimation, spriteDisplayTime = 200.milliseconds)
-//            isMoving = anyMovement
-//        }
     }
 
 }
