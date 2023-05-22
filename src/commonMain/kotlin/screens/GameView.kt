@@ -71,20 +71,22 @@ class GameView() : Scene() {
             doll.openChestAnimationRight,
             doll.attackAnimationRight
         )
-        val chest = ChestAnimate(blueChest.idleAnimation, 1)
-        val redPotion = LootAnimate(loot.idleAnimation)
+        val chest = ChestAnimate(blueChest.idleAnimation, blueChest.openAnimation, 1)
+        val redPotion = LootAnimate(loot.idleAnimation, sceneContainer)
 
         val monsterManager = MonsterManager(sceneContainer, player, pink)
 
-        drawS(player)
-        player.xy(200, 200)
         drawS(chest)
         chest.xy(rand(20, 450), rand(70, 250))
 
-        addChild(player)
-        addChild(chest)
+        drawS(player)
+        player.xy(200, 200)
 
-        val playerManager = PlayerManager(sceneContainer, player)
+        addChild(chest)
+        addChild(player)
+
+
+        val playerManager = PlayerManager(sceneContainer, player, chest)
 
         var numOfMonsters = 0
         when (MyModule.event) {
@@ -100,6 +102,7 @@ class GameView() : Scene() {
         fun update() {
             monsterManager.update()
             playerManager.update()
+            chest.update(player, redPotion)
         }
 
         update()

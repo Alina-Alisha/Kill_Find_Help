@@ -43,7 +43,6 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
                     if (monster.distanceTo(player) <= 50) {
                         monster.attack(player)
                         player.takeDamage(0.01)
-                        println(player.health)
                     }
                 }
             }

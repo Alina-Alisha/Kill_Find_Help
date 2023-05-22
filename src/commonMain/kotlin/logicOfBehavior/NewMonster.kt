@@ -46,13 +46,8 @@ class NewMonster(
     fun walkTo(targetX: Double, targetY: Double) {
         var dirX = targetX - x
         var dirY = targetY - y
-        directionX = if (dirX > 0) {
-            playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
-            DirectionX.RIGHT
-        } else {
-            playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
-            DirectionX.LEFT
-        }
+        directionX = if (dirX > 0) DirectionX.RIGHT else DirectionX.LEFT
+        playAnimation(spriteAnimation = walkAnimation, spriteDisplayTime = 200.milliseconds)
         directionY = if (dirY > 0) {
             DirectionY.DOWN
         } else {
@@ -62,6 +57,7 @@ class NewMonster(
         dirY += if (directionY == DirectionY.DOWN) 36 else -36
         x += dirX / 100 //* if (direction == Direction.RIGHT) 1 else -1
         y += dirY / 100 //* if (direction == Direction.RIGHT) 1 else -1
+        //flipSprite(this) //раздвоение личности
     }
 
 }
