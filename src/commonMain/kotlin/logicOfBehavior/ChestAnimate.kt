@@ -9,6 +9,7 @@ class ChestAnimate(
     val numOfLoot: Int
 ) : Sprite(idleAnimation) {
     var wasOpen = false
+    var plusLives = numOfLoot
     private fun open() {
         if (!wasOpen) {
             playAnimation(spriteAnimation = openAnimation, spriteDisplayTime = 200.milliseconds)
@@ -21,6 +22,10 @@ class ChestAnimate(
             open()
             loot.update(this as ChestAnimate)
             loot.addUpdater { loot.animate(it) }
+            if (plusLives > 0) {
+                player.health += numOfLoot
+                plusLives--
+            }
         }
     }
 }

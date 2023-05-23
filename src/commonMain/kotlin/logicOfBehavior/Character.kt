@@ -17,7 +17,7 @@ open class Character(
     open val walkAnimation: SpriteAnimation,
     open val damage: Int,
     open var health: Double
-): Sprite(idleAnimation) {
+) : Sprite(idleAnimation) {
     open var isAttacking = false
     open var directionX = DirectionX.LEFT
     open var deadCooldown = 0.16
@@ -27,8 +27,7 @@ open class Character(
         if (sprite.directionX == DirectionX.LEFT) {
             sprite.scaleX = 1.0
             sprite.x -= 56
-        }
-        else if (sprite.directionX == DirectionX.RIGHT) {
+        } else if (sprite.directionX == DirectionX.RIGHT) {
             sprite.x += 56
             sprite.scaleX = -1.0
         }
@@ -37,15 +36,18 @@ open class Character(
     open fun takeDamage(damage: Double) {
         health -= damage
         if (health <= 0) {
-            die(TimeSpan(2.2))
+            die(TimeSpan(2.3))
         }
     }
 
     fun die(delta: TimeSpan) {
         if (deadCooldown > 0) {
-            playAnimation(deathAnimation, spriteDisplayTime = 200.milliseconds)
+            println(deadCooldown)
+            playAnimation(deathAnimation, spriteDisplayTime = 300.milliseconds)
             deadCooldown -= delta.seconds
             isDead = true
-        } else removeFromParent()
+        } else {
+            this.removeFromParent()
+        }
     }
 }

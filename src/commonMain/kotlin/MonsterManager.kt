@@ -10,12 +10,7 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
 
     private val monsters = mutableListOf<NewMonster>()
 
-    private fun spawnMonster(monster: NewMonster) {
-        monsters.add(monster)
-        scene.addChild(monster)
-    }
-
-    fun creatingMonsters(numOfMonsters: Int) {
+    fun spawnMonster(numOfMonsters: Int) {
         for (countMonsters in 1..numOfMonsters) {
             val monster = NewMonster(
                 pink.idleAnimation,
@@ -26,7 +21,7 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
                 pink.hurtAnimation,
                 pink.attackAnimation,
             )
-            spawnMonster(monster)
+            monsters.add(monster)
         }
     }
 

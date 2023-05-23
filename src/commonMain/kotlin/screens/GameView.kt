@@ -1,13 +1,18 @@
 package screens
 
+import LivesManager
 import MonsterManager
 import MyModule
 import logicOfBehavior.PlayerCharacter
 import PlayerManager
 import animate.*
+import com.soywiz.korge.input.*
 import logicOfBehavior.*
 import com.soywiz.korge.scene.*
+import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
+import com.soywiz.korim.color.*
+import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
 
@@ -19,7 +24,7 @@ fun <T> drawS(element: T): T {
 
 class GameView() : Scene() {
     override suspend fun SContainer.sceneInit() {
-        //val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
+        val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
         val x0 = sceneContainer.width / 2
         val y0 = sceneContainer.height / 2
         var img = image(resourcesVfs["m_game_background_4.png"].readBitmap(), 0.5, 0.5) {
@@ -60,8 +65,6 @@ class GameView() : Scene() {
         val pink =
             Pink(spriteMapIdleMonster, spriteMapHurt, spriteMapDeath, spriteMapWalkRightMonster, spriteMapMonsterAttack)
 
-        val lives = mutableListOf<HealthAnimate>()
-
         val player = PlayerCharacter(
             doll.idleAnimation,
             doll.deadAnimation,
@@ -95,16 +98,36 @@ class GameView() : Scene() {
             3 -> numOfMonsters = 6
         }
 
-        monsterManager.creatingMonsters(numOfMonsters)
+        monsterManager.spawnMonster(numOfMonsters)
         monsterManager.drawMonsters()
+
+        val livesManager = LivesManager(sceneContainer, player, heart)
+        livesManager.spawnLives()
+        //livesManager.drawLives()
 
 
         fun update() {
             monsterManager.update()
             playerManager.update()
             chest.update(player, redPotion)
+            livesManager.update()
         }
 
         update()
+
+        var menuButton = uiButton(100.0, 32.0) {
+            text = "menu"
+            uiSkin = UISkin {
+                val colorTransform = ColorTransform(0.48, 0.83, 0.66)
+                this.uiSkinBitmap = this.uiSkinBitmap.withColorTransform(colorTransform)
+                this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
+                //this.textSize = 30.0
+                this.textFont = font
+            }
+            position(0, 0)
+            onClick {
+                sceneContainer.changeTo<GameMenu>()
+            }
+        }
     }
 }
