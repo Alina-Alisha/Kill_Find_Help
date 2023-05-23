@@ -5,11 +5,9 @@ import com.soywiz.korim.bitmap.*
 
 class Doll(
     spriteMapIdle: Bitmap,
-    spriteMapWalkRight: Bitmap,
-    spriteMapWalkLeft: Bitmap,
-    spriteMapOpenChestRight: Bitmap,
-    spriteMapOpenChestLeft: Bitmap,
-    spriteMapAttackRight: Bitmap,
+    spriteMapWalk: Bitmap,
+    spriteMapOpenChest: Bitmap,
+    spriteMapAttack: Bitmap,
     spriteMapDead: Bitmap
 ) {
     val idleAnimation = SpriteAnimation(
@@ -24,8 +22,8 @@ class Doll(
         offsetBetweenRows = 0,
     )
 
-    val walkRightAnimation = SpriteAnimation(
-        spriteMap = spriteMapWalkRight,
+    val walkAnimation = SpriteAnimation(
+        spriteMap = spriteMapWalk,
         spriteWidth = 56,
         spriteHeight = 73,
         marginTop = 0,
@@ -35,19 +33,8 @@ class Doll(
         offsetBetweenColumns = 0,
         offsetBetweenRows = 0,
     )
-    val walkLeftAnimation = SpriteAnimation(
-        spriteMap = spriteMapWalkLeft,
-        spriteWidth = 128,
-        spriteHeight = 128,
-        marginTop = 0,
-        marginLeft = 0,
-        columns = 5,
-        rows = 1,
-        offsetBetweenColumns = 0,
-        offsetBetweenRows = 0,
-    )
-    val openChestAnimationRight = SpriteAnimation(
-        spriteMap = spriteMapOpenChestRight,
+    val openChestAnimation = SpriteAnimation(
+        spriteMap = spriteMapOpenChest,
         spriteWidth = 128,
         spriteHeight = 73,
         marginTop = 0,
@@ -57,19 +44,9 @@ class Doll(
         offsetBetweenColumns = 0,
         offsetBetweenRows = 0,
     )
-    val openChestAnimationLeft = SpriteAnimation(
-        spriteMap = spriteMapOpenChestLeft,
-        spriteWidth = 128,
-        spriteHeight = 128,
-        marginTop = 0,
-        marginLeft = 0,
-        columns = 10,
-        rows = 1,
-        offsetBetweenColumns = 0,
-        offsetBetweenRows = 0,
-    )
-    val attackAnimationRight = SpriteAnimation(
-        spriteMap = spriteMapAttackRight,
+
+    val attackAnimation = SpriteAnimation(
+        spriteMap = spriteMapAttack,
         spriteWidth = 128,
         spriteHeight = 73,
         marginTop = 0,
