@@ -8,7 +8,7 @@ import screens.*
 
 class MonsterManager(private val scene: SceneContainer, private val player: PlayerCharacter, private val pink: Pink) {
 
-    private val monsters = mutableListOf<NewMonster>()
+    val monsters = mutableListOf<NewMonster>()
 
     fun spawnMonster(numOfMonsters: Int) {
         for (countMonsters in 1..numOfMonsters) {

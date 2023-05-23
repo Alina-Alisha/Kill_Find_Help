@@ -115,6 +115,10 @@ class GameView() : Scene() {
 
         update()
 
+        val title = Titles(sceneContainer, player, monsterManager, font)
+
+        addUpdater { title.update() }
+
         var menuButton = uiButton(100.0, 32.0) {
             text = "menu"
             uiSkin = UISkin {
