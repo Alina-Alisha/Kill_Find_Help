@@ -3,10 +3,9 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korge.view.*
 import logicOfBehavior.*
 
-class PlayerManager(private val scene: SceneContainer, private val player: PlayerCharacter, val chest: ChestAnimate) {
+class PlayerManager(private val scene: SceneContainer, private val player: PlayerCharacter) {
     fun update() {
         player.addUpdater { time ->
-            //player.playAnimation(player.idleAnimation, spriteDisplayTime = 100.milliseconds)
             val scale = 16.milliseconds / time
             val disp = 2 * scale
             val keys = scene.views.input.keys

@@ -14,11 +14,12 @@ import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
+import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
 
 fun <T> drawS(element: T): T {
-    element.apply {  }
+    element.apply { }
     return element
 }
 
@@ -89,7 +90,7 @@ class GameView() : Scene() {
         addChild(player)
 
 
-        val playerManager = PlayerManager(sceneContainer, player, chest)
+        val playerManager = PlayerManager(sceneContainer, player)
 
         var numOfMonsters = 0
         when (MyModule.event) {
@@ -100,11 +101,16 @@ class GameView() : Scene() {
 
         monsterManager.spawnMonster(numOfMonsters)
         monsterManager.drawMonsters()
+        monsterManager.monsters.forEach { monster ->
+            addChild(monster)
+        }
 
         val livesManager = LivesManager(sceneContainer, player, heart)
         livesManager.spawnLives()
-        //livesManager.drawLives()
-
+        livesManager.drawLives()
+        livesManager.lives.forEach { live ->
+            addChild(live)
+        }
 
         fun update() {
             monsterManager.update()
@@ -115,9 +121,34 @@ class GameView() : Scene() {
 
         update()
 
-        val title = Titles(sceneContainer, player, monsterManager, font)
+        //val title = Titles(sceneContainer, player, monsterManager, font)
+        //title.addUpdater { title.update(it) }
+//        addUpdater {
+//            println(title.winOrLoose)
+//            title.update(it)
+//        }
 
-        addUpdater { title.update() }
+        var checkout = 3.0
+        addUpdater {
+            if (monsterManager.monsters.size == 0 && !player.isDead) {
+                MyModule.level += 1
+                var winText = text("YOU WIN", 70.0, Colors.WHITE, font) {
+                    position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 60)
+                }
+            } else if (player.isDead && monsterManager.monsters.size > 0) {
+                var looseText = text("YOU ARE DEAD", 70.0, Colors.WHITE, font) {
+                    position(views.virtualWidth / 2 - 200, views.virtualHeight / 2 - 60)
+                }
+                if (checkout > 0) {
+                    checkout -= it.seconds
+                } else {
+                    monsterManager.clearMonsters()
+                    looseText.removeFromParent()
+                    launch { sceneContainer.changeTo<GameMenu>() }
+                }
+            }
+        }
+
 
         var menuButton = uiButton(100.0, 32.0) {
             text = "menu"

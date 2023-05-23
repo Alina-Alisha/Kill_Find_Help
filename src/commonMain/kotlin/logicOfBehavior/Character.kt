@@ -42,7 +42,6 @@ open class Character(
 
     fun die(delta: TimeSpan) {
         if (deadCooldown > 0) {
-            println(deadCooldown)
             playAnimation(deathAnimation, spriteDisplayTime = 300.milliseconds)
             deadCooldown -= delta.seconds
             isDead = true

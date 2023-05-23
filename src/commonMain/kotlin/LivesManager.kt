@@ -6,7 +6,7 @@ import screens.*
 
 class LivesManager(private val scene: SceneContainer, private val player: PlayerCharacter, private val heart: Health) {
 
-    private val lives = mutableListOf<HealthAnimate>()
+    val lives = mutableListOf<HealthAnimate>()
 
     var health = player.health.toInt()
 
@@ -20,7 +20,7 @@ class LivesManager(private val scene: SceneContainer, private val player: Player
         }
     }
 
-    private fun drawLives() {
+    fun drawLives() {
         val h = player.health.toInt()
         val offset = 35 //длина спрайта сердечка
         val x0 = scene.width / 2
@@ -33,7 +33,7 @@ class LivesManager(private val scene: SceneContainer, private val player: Player
             live.xy(x, y)
             live.scale(1.2)
             drawS(live)
-            scene.addChild(live)
+            //scene.addChild(live)
             x+=offset
         }
     }
@@ -49,7 +49,6 @@ class LivesManager(private val scene: SceneContainer, private val player: Player
         //spawnLives(player.health.toInt())
         //println(player.health.toInt())
         lives.forEach { live ->
-            drawLives()
             live.addUpdater {
                 //spawnLives()
                 if (player.health.toInt() == health - 1) {
@@ -61,7 +60,6 @@ class LivesManager(private val scene: SceneContainer, private val player: Player
                     lives.remove(live)
                     //live.removeFromParent()
                 }
-                //println(player.health.toInt())
             }
         }
     }

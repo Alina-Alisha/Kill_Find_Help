@@ -52,7 +52,13 @@ class MonsterManager(private val scene: SceneContainer, private val player: Play
             monster.xy(rand(20, 500), rand(70, 250))
             monster.scale(2)
             drawS(monster)
-            scene.addChild(monster)
+        }
+    }
+
+    fun clearMonsters() {
+        monsters.forEach { monster ->
+            monsters.remove(monster)
+            monster.removeFromParent()
         }
     }
 }
