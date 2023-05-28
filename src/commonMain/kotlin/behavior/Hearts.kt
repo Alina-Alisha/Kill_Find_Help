@@ -10,12 +10,10 @@ class Hearts(baseValue: Int, private val icon: Bitmap, private val space: Double
         if (new > children.size) {
             image(icon) {
                 x += (children.size - 1) * (icon.width + space)
-                println("+")
             }
         }
         if (new < children.size) {
             removeChild(children.last())
-            println("-")
         }
         return@vetoable new > 0
     }
@@ -27,6 +25,7 @@ class Hearts(baseValue: Int, private val icon: Bitmap, private val space: Double
             }
         }
     }
+
 }
 
 

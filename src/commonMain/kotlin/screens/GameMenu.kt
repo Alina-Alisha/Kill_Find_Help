@@ -72,11 +72,12 @@ class GameMenu : Scene() {
                 this.buttonTextAlignment = TextAlignment.TOP_RIGHT
             }
             onClick {
+                println(1)
                 sceneContainer.changeTo<GameView>()
             }
         }
 
-        var level2Button = uiButton(32.0, 32.0) {
+        val level2Button = uiButton(32.0, 32.0) {
             text = "kill 4 monsters        "
             textColor = Colors.BLACK
             textFont = font
@@ -88,11 +89,12 @@ class GameMenu : Scene() {
                 MyModule.event = 2
                 MyModule.health = 5.0
                 MyModule.numOfLoot = 0
+                println(2)
                 sceneContainer.changeTo<GameView>()
             }
         }
 
-        var level3Button = uiButton(32.0, 32.0) {
+        val level3Button = uiButton(32.0, 32.0) {
             text = "kill 6 monsters        "
             textColor = Colors.BLACK
             textFont = font
@@ -104,6 +106,7 @@ class GameMenu : Scene() {
                 MyModule.event = 3
                 MyModule.health = 5.0
                 MyModule.numOfLoot = 2
+                println(3)
                 sceneContainer.changeTo<GameView>()
             }
         }
@@ -123,6 +126,7 @@ class GameMenu : Scene() {
                 MyModule.event = 4
                 MyModule.health = 7.0
                 MyModule.numOfLoot = 1
+                println(4)
                 sceneContainer.changeTo<GameView>()
             }
         }
@@ -142,6 +146,7 @@ class GameMenu : Scene() {
                 MyModule.event = 5
                 MyModule.health = 7.0
                 MyModule.numOfLoot = 1
+                println(5)
                 sceneContainer.changeTo<GameView>()
             }
         }

@@ -4,12 +4,14 @@ import MonsterManager
 import MyModule
 import behavior.PlayerCharacter
 import PlayerManager
+import PlayerManager.Companion.numOfOpenChest
 import animate.*
 import com.soywiz.korge.input.*
 import behavior.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
+import com.soywiz.korim.bitmap.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
@@ -86,6 +88,32 @@ class GameView() : Scene() {
 
         val playerManager = PlayerManager(sceneContainer, player, heart)
 
+        fun Container.hearts(
+            baseValue: Int,
+            icon: Bitmap = heart,
+            space: Double = 0.0,
+            block: Hearts.() -> Unit = {}
+        ) {
+            val hearts = Hearts(baseValue, icon, space)
+            this.addChild(hearts)
+            hearts.block()
+        }
+
+        this.hearts(4) {
+            x = 10.0
+            y = 10.0
+            this.addUpdater {
+                val h = player.health.toInt()
+                if (h == (PlayerManager.playerHealth - 1))
+                    this@hearts.value--
+                if (player.isOpeningChest && numOfOpenChest > 0) {
+                    this@hearts.value++
+                    numOfOpenChest--
+                }
+            }
+        }
+
+
         var numOfMonsters = 0
         when (MyModule.event) {
             1 -> numOfMonsters = 2
@@ -117,6 +145,7 @@ class GameView() : Scene() {
                     MyModule.level += 1
                     a--
                 }
+
                 var winText = text("YOU WIN", 70.0, Colors.WHITE, font) {
                     position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 60)
                 }
