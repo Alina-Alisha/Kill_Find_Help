@@ -6,7 +6,7 @@ import com.soywiz.korge.view.*
 class ChestAnimate(
     idleAnimation: SpriteAnimation,
     private val openAnimation: SpriteAnimation,
-    private val numOfLoot: Int
+    numOfLoot: Int
 ) : Sprite(idleAnimation) {
     var wasOpen = false
     var plusLives = numOfLoot

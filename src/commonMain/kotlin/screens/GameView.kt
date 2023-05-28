@@ -73,7 +73,7 @@ class GameView() : Scene() {
         val chest = ChestAnimate(blueChest.idleAnimation, blueChest.openAnimation, MyModule.numOfLoot)
         val redPotion = LootAnimate(loot.idleAnimation, sceneContainer)
 
-        val monsterManager = MonsterManager(sceneContainer, player, pink)
+        val monsterManager = MonsterManager(player, pink)
 
         drawS(chest)
         chest.xy(rand(20, 450), rand(70, 250))

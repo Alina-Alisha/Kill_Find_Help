@@ -6,13 +6,13 @@ import com.soywiz.korma.geom.*
 import behavior.*
 import screens.*
 
-class MonsterManager(private val scene: SceneContainer, private val player: PlayerCharacter, private val pink: Pink) {
+class MonsterManager(private val player: PlayerCharacter, private val pink: Pink) {
 
-    val monsters = mutableListOf<NewMonster>()
+    val monsters = mutableListOf<Monster>()
 
     fun spawnMonster(numOfMonsters: Int) {
         for (countMonsters in 1..numOfMonsters) {
-            val monster = NewMonster(
+            val monster = Monster(
                 pink.idleAnimation,
                 pink.deathAnimation,
                 pink.walkAnimation,
