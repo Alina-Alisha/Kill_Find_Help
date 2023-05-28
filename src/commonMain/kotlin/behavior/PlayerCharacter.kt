@@ -1,5 +1,6 @@
-package logicOfBehavior
+package behavior
 
+import MyModule
 import com.soywiz.klock.*
 import com.soywiz.korev.*
 import com.soywiz.korge.input.*
@@ -33,10 +34,10 @@ class PlayerCharacter(
     override var directionX = DirectionX.LEFT
 
     private val keyAssignments = listOf(
-        KeyAssignment(Key.A, DirectionX.LEFT) { x -= it },
-        KeyAssignment(Key.D, DirectionX.RIGHT) { x += it },
-        KeyAssignment(Key.W, DirectionX.NONE) { y -= it },
-        KeyAssignment(Key.S, DirectionX.NONE) { y += it }
+        KeyAssignment(Key.A, DirectionX.LEFT) { if(x > 60) x -= it },
+        KeyAssignment(Key.D, DirectionX.RIGHT) { if(x < MyModule.size.width - 70) x += it },
+        KeyAssignment(Key.W, DirectionX.NONE) { if(y > 80) y -= it },
+        KeyAssignment(Key.S, DirectionX.NONE) { if(y < MyModule.size.height - 80) y += it }
     )
 
     private val mouseAssignments = listOf(

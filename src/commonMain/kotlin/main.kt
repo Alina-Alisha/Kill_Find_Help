@@ -33,9 +33,11 @@ object MyModule : Module() {
         mapPrototype { Menu() }
         mapPrototype { GameView() }
         mapPrototype { GameMenu() }
-        //mapPrototype { Play() }
     }
 
     var level = 1
     var event = 1
+    var health = 4.0
+    var numOfLoot = 1
+    var passEvent = false
 }

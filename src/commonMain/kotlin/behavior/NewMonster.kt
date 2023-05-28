@@ -1,4 +1,4 @@
-package logicOfBehavior
+package behavior
 
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
@@ -55,8 +55,8 @@ class NewMonster(
         }
         dirX += if (directionX == DirectionX.RIGHT) 28 else -28
         dirY += if (directionY == DirectionY.DOWN) 36 else -36
-        x += dirX / 100 //* if (direction == Direction.RIGHT) 1 else -1
-        y += dirY / 100 //* if (direction == Direction.RIGHT) 1 else -1
+        x += dirX / 100
+        y += dirY / 100
         //flipSprite(this) //раздвоение личности
     }
 

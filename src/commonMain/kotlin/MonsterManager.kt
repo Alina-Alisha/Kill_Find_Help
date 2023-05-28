@@ -3,7 +3,7 @@ import com.soywiz.klock.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.*
-import logicOfBehavior.*
+import behavior.*
 import screens.*
 
 class MonsterManager(private val scene: SceneContainer, private val player: PlayerCharacter, private val pink: Pink) {

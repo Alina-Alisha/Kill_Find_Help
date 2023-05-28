@@ -12,6 +12,12 @@ import com.soywiz.korim.text.*
 import com.soywiz.korio.file.std.*
 import kotlin.random.*
 
+data class ButtonsAndLevels(
+    val button: UIButton,
+    val level: Int,
+    val event: Int
+)
+
 fun rand(start: Int, end: Int): Int {
     require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
     return Random(System.nanoTime()).nextInt(end - start + 1) + start
@@ -30,7 +36,6 @@ fun chooseSpace(availableSpaces: MutableMap<Pair<Double, Double>, Int>): Pair<Do
 class GameMenu : Scene() {
     override suspend fun SContainer.sceneInit() {
         val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
-        //val paper = resourcesVfs["paper1 (2).png"].readBitmap().toBMP32IfRequired()
         val x0 = sceneContainer.width / 2
         val y0 = sceneContainer.height / 2
         var img = image(resourcesVfs["new_board.png"].readBitmap(), 0.5, 0.5) {
@@ -56,7 +61,6 @@ class GameMenu : Scene() {
         var titleText = text("Available jobs", 30.0, Colors.WHITE, font) {
             position(views.virtualWidth / 2 - 70, views.virtualHeight / 2 - 157)
         }
-        var textForButton = "kill 2 monsters        "
         val level1Button = uiButton(32.0, 32.0) {
             text = "kill 2 monsters        "
             uiSkin = UISkin {
@@ -68,47 +72,100 @@ class GameMenu : Scene() {
                 this.buttonTextAlignment = TextAlignment.TOP_RIGHT
             }
             onClick {
-                MyModule.event = 1
                 sceneContainer.changeTo<GameView>()
             }
         }
 
         var level2Button = uiButton(32.0, 32.0) {
+            text = "kill 4 monsters        "
+            textColor = Colors.BLACK
+            textFont = font
+            textSize = 20.0
+            buttonBackColor = Colors["#bfa56a"]
+            buttonTextAlignment = TextAlignment.TOP_RIGHT
+            onClick {
+                MyModule.passEvent = false
+                MyModule.event = 2
+                MyModule.health = 5.0
+                MyModule.numOfLoot = 0
+                sceneContainer.changeTo<GameView>()
+            }
+        }
+
+        var level3Button = uiButton(32.0, 32.0) {
             text = "kill 6 monsters        "
             textColor = Colors.BLACK
             textFont = font
             textSize = 20.0
             buttonBackColor = Colors["#bfa56a"]
             buttonTextAlignment = TextAlignment.TOP_RIGHT
-            //uiSkinBitmap = paper
-            //position(c.first, c.second)
             onClick {
+                MyModule.passEvent = false
                 MyModule.event = 3
+                MyModule.health = 5.0
+                MyModule.numOfLoot = 2
                 sceneContainer.changeTo<GameView>()
             }
         }
 
-        if (MyModule.level == 1) {
-            val c = chooseSpace(availableSpaces)
-            level1Button.addUpdater { position(c.first, c.second) }
-        } else if (MyModule.level >= 2) {
-            availableSpaces[Pair(level1Button.x, level1Button.y)] = 0
-            val c = chooseSpace(availableSpaces)
-            level1Button.text = "kill 4 monsters        "
-            level1Button.onClick {
-                MyModule.event = 2
+        val level4Button = uiButton(32.0, 32.0) {
+            text = "kill 7 monsters        "
+            uiSkin = UISkin {
+                val colorTransform = ColorTransform(0.48, 0.83, 0.66)
+                this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
+                this.textColor = Colors.BLACK
+                this.textFont = font
+                this.textSize = 20.0
+                this.buttonTextAlignment = TextAlignment.TOP_RIGHT
+            }
+            onClick {
+                MyModule.passEvent = false
+                MyModule.event = 4
+                MyModule.health = 7.0
+                MyModule.numOfLoot = 1
                 sceneContainer.changeTo<GameView>()
             }
-            level1Button.addUpdater { position(c.first, c.second) }
-            val a = chooseSpace(availableSpaces) //почему когда создаём новую переменную, всё работает?
-            level2Button.addUpdater { position(a.first, a.second) }
         }
 
-//        if (MyModule.level == 2) {
-//            val c = screens.chooseSpace(availableSpaces)
-//            level2Button.addUpdater { position(c.first, c.second) }
-//        }
-//        else availableSpaces[Pair(level2Button.x, level2Button.y)] = 0
+        val level5Button = uiButton(32.0, 32.0) {
+            text = "kill 7 monsters        "
+            uiSkin = UISkin {
+                val colorTransform = ColorTransform(0.48, 0.83, 0.66)
+                this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
+                this.textColor = Colors.BLACK
+                this.textFont = font
+                this.textSize = 20.0
+                this.buttonTextAlignment = TextAlignment.TOP_RIGHT
+            }
+            onClick {
+                MyModule.passEvent = false
+                MyModule.event = 5
+                MyModule.health = 7.0
+                MyModule.numOfLoot = 1
+                sceneContainer.changeTo<GameView>()
+            }
+        }
+
+        val assignments = listOf (
+            ButtonsAndLevels(level1Button, 1, 1),
+            ButtonsAndLevels(level2Button, 2, 2),
+            ButtonsAndLevels(level3Button, 2, 3),
+            ButtonsAndLevels(level4Button, 3, 4),
+            ButtonsAndLevels(level5Button, 3, 5)
+        )
+
+        assignments.filter { it.event == MyModule.event }.onEach {
+            if (MyModule.passEvent) {
+                availableSpaces[Pair(it.button.x, it.button.y)] = 0
+                it.button.visible = false
+            }
+        }
+
+        assignments.filter { it.level == MyModule.level }.onEach {
+            val a = chooseSpace(availableSpaces)
+            it.button.addUpdater { position(a.first, a.second) }
+        }.any()
+
 
         var exitButton = uiButton(32.0, 32.0) {
             text = "Exit        "

@@ -1,13 +1,12 @@
 package screens
 
-import LivesManager
 import MonsterManager
 import MyModule
-import logicOfBehavior.PlayerCharacter
+import behavior.PlayerCharacter
 import PlayerManager
 import animate.*
 import com.soywiz.korge.input.*
-import logicOfBehavior.*
+import behavior.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
@@ -33,7 +32,7 @@ class GameView() : Scene() {
             y = y0
         }
 
-        val heart = Health(resourcesVfs["health.png"].readBitmap())
+        val heart = resourcesVfs["health1.png"].readBitmap()
 
         val spriteMapChest = resourcesVfs["AoM2.png"].readBitmap()
         val spriteMapRedPotion = resourcesVfs["Red Potion.png"].readBitmap()
@@ -67,11 +66,11 @@ class GameView() : Scene() {
             doll.deadAnimation,
             doll.walkAnimation,
             1,
-            5.0,
+            MyModule.health,
             doll.openChestAnimation,
             doll.attackAnimation
         )
-        val chest = ChestAnimate(blueChest.idleAnimation, blueChest.openAnimation, 1)
+        val chest = ChestAnimate(blueChest.idleAnimation, blueChest.openAnimation, MyModule.numOfLoot)
         val redPotion = LootAnimate(loot.idleAnimation, sceneContainer)
 
         val monsterManager = MonsterManager(sceneContainer, player, pink)
@@ -85,14 +84,14 @@ class GameView() : Scene() {
         addChild(chest)
         addChild(player)
 
-
-        val playerManager = PlayerManager(sceneContainer, player)
+        val playerManager = PlayerManager(sceneContainer, player, heart)
 
         var numOfMonsters = 0
         when (MyModule.event) {
             1 -> numOfMonsters = 2
             2 -> numOfMonsters = 4
             3 -> numOfMonsters = 6
+            4, 5 -> numOfMonsters = 7
         }
 
         monsterManager.spawnMonster(numOfMonsters)
@@ -101,38 +100,28 @@ class GameView() : Scene() {
             addChild(monster)
         }
 
-        val livesManager = LivesManager(sceneContainer, player, heart)
-        livesManager.spawnLives()
-        livesManager.drawLives()
-        livesManager.lives.forEach { live ->
-            addChild(live)
-        }
-
         fun update() {
             monsterManager.update()
-            playerManager.update()
             chest.update(player, redPotion)
-            livesManager.update()
+            playerManager.update()
         }
 
         update()
 
-        //val title = Titles(sceneContainer, player, monsterManager, font)
-        //title.addUpdater { title.update(it) }
-//        addUpdater {
-//            println(title.winOrLoose)
-//            title.update(it)
-//        }
-
         var checkout = 3.0
+        var a = 1
         addUpdater {
             if (monsterManager.monsters.size == 0 && !player.isDead) {
-                MyModule.level += 1
+                MyModule.passEvent = true
+                if (a > 0) {
+                    MyModule.level += 1
+                    a--
+                }
                 var winText = text("YOU WIN", 70.0, Colors.WHITE, font) {
                     position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 60)
                 }
             } else if (player.isDead && monsterManager.monsters.size > 0) {
-                var looseText = text("YOU ARE DEAD", 70.0, Colors.WHITE, font) {
+                val looseText = text("YOU ARE DEAD", 70.0, Colors.WHITE, font) {
                     position(views.virtualWidth / 2 - 200, views.virtualHeight / 2 - 60)
                 }
                 if (checkout > 0) {
@@ -145,7 +134,6 @@ class GameView() : Scene() {
             }
         }
 
-
         var menuButton = uiButton(100.0, 32.0) {
             text = "menu"
             uiSkin = UISkin {
@@ -154,7 +142,7 @@ class GameView() : Scene() {
                 this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
                 this.textFont = font
             }
-            position(0, 0)
+            position(sceneContainer.width-100, 0.0)
             onClick {
                 sceneContainer.changeTo<GameMenu>()
             }

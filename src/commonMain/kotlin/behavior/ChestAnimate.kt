@@ -1,12 +1,12 @@
-package logicOfBehavior
+package behavior
 
 import com.soywiz.klock.*
 import com.soywiz.korge.view.*
 
 class ChestAnimate(
     idleAnimation: SpriteAnimation,
-    val openAnimation: SpriteAnimation,
-    val numOfLoot: Int
+    private val openAnimation: SpriteAnimation,
+    private val numOfLoot: Int
 ) : Sprite(idleAnimation) {
     var wasOpen = false
     var plusLives = numOfLoot
@@ -18,13 +18,13 @@ class ChestAnimate(
     }
 
     fun update(player: PlayerCharacter, loot: LootAnimate) {
-        this.onCollision({it == player && player.isOpeningChest}) {
+        this.onCollision({ it == player && player.isOpeningChest }) {
             open()
             loot.update(this as ChestAnimate)
             loot.addUpdater { loot.animate(it) }
             if (plusLives > 0) {
-                player.health += numOfLoot
-                plusLives--
+                player.health += 1
+                plusLives -= 1
             }
         }
     }

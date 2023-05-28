@@ -1,4 +1,4 @@
-package logicOfBehavior
+package behavior
 
 import com.soywiz.klock.*
 import com.soywiz.korge.scene.*
