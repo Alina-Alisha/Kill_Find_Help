@@ -22,6 +22,7 @@ fun rand(start: Int, end: Int): Int {
     require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
     return Random(System.nanoTime()).nextInt(end - start + 1) + start
 }
+
 fun chooseSpace(availableSpaces: MutableMap<Pair<Double, Double>, Int>): Pair<Double, Double> {
     val h = rand(0, 5)
     val y = 89.0 + 36.0 * h
@@ -61,6 +62,7 @@ class GameMenu : Scene() {
         var titleText = text("Available jobs", 30.0, Colors.WHITE, font) {
             position(views.virtualWidth / 2 - 70, views.virtualHeight / 2 - 157)
         }
+
         val level1Button = uiButton(32.0, 32.0) {
             text = "kill 2 monsters        "
             uiSkin = UISkin {
@@ -77,13 +79,18 @@ class GameMenu : Scene() {
             }
         }
 
+
         val level2Button = uiButton(32.0, 32.0) {
             text = "kill 4 monsters        "
-            textColor = Colors.BLACK
-            textFont = font
-            textSize = 20.0
-            buttonBackColor = Colors["#bfa56a"]
-            buttonTextAlignment = TextAlignment.TOP_RIGHT
+            uiSkin = UISkin {
+                val colorTransform = ColorTransform(0.48, 0.83, 0.66)
+                this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
+                this.textColor = Colors.BLACK
+                this.textFont = font
+                this.textSize = 20.0
+                this.buttonTextAlignment = TextAlignment.TOP_RIGHT
+            }
+            visible = false
             onClick {
                 MyModule.passEvent = false
                 MyModule.event = 2
@@ -101,6 +108,7 @@ class GameMenu : Scene() {
             textSize = 20.0
             buttonBackColor = Colors["#bfa56a"]
             buttonTextAlignment = TextAlignment.TOP_RIGHT
+            visible = false
             onClick {
                 MyModule.passEvent = false
                 MyModule.event = 3
@@ -120,6 +128,7 @@ class GameMenu : Scene() {
                 this.textFont = font
                 this.textSize = 20.0
                 this.buttonTextAlignment = TextAlignment.TOP_RIGHT
+                visible = false
             }
             onClick {
                 MyModule.passEvent = false
@@ -140,6 +149,7 @@ class GameMenu : Scene() {
                 this.textFont = font
                 this.textSize = 20.0
                 this.buttonTextAlignment = TextAlignment.TOP_RIGHT
+                visible = false
             }
             onClick {
                 MyModule.passEvent = false
@@ -151,7 +161,8 @@ class GameMenu : Scene() {
             }
         }
 
-        val assignments = listOf (
+
+        val assignments = listOf(
             ButtonsAndLevels(level1Button, 1, 1),
             ButtonsAndLevels(level2Button, 2, 2),
             ButtonsAndLevels(level3Button, 2, 3),
@@ -168,7 +179,10 @@ class GameMenu : Scene() {
 
         assignments.filter { it.level == MyModule.level }.onEach {
             val a = chooseSpace(availableSpaces)
-            it.button.addUpdater { position(a.first, a.second) }
+            it.button.addUpdater {
+                visible = true
+                position(a.first, a.second)
+            }
         }.any()
 
 

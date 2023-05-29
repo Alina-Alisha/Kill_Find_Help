@@ -99,13 +99,16 @@ class GameView() : Scene() {
             hearts.block()
         }
 
+        var h = player.health.toInt()
         this.hearts(4) {
             x = 10.0
             y = 10.0
             this.addUpdater {
-                val h = player.health.toInt()
-                if (h == (PlayerManager.playerHealth - 1))
+                if (h - 1 == PlayerManager.playerHealth) {
+                    println("-")
                     this@hearts.value--
+                    h = player.health.toInt()
+                }
                 if (player.isOpeningChest && numOfOpenChest > 0) {
                     this@hearts.value++
                     numOfOpenChest--
@@ -171,7 +174,7 @@ class GameView() : Scene() {
                 this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
                 this.textFont = font
             }
-            position(sceneContainer.width-100, 0.0)
+            position(sceneContainer.width - 100, 0.0)
             onClick {
                 sceneContainer.changeTo<GameMenu>()
             }
