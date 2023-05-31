@@ -37,7 +37,7 @@ class Menu() : Scene() {
             }
             position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 64)
             onClick {
-                sceneContainer.changeTo<GameMenu>()
+                sceneContainer.changeTo<ChooseYourFighter>()
             }
         }
         var exitButton = uiButton(200.0, 40.0) {

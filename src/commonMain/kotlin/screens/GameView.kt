@@ -26,6 +26,37 @@ fun <T> drawS(element: T): T {
 
 class GameView() : Scene() {
     override suspend fun SContainer.sceneInit() {
+
+        suspend fun choose(): CharacterSprite {
+
+            if (MyModule.character == ChosenFighter.DOLL) {
+                val spriteMapIdle = resourcesVfs["doll/Idle.png"].readBitmap()
+                val spriteMapWalk = resourcesVfs["doll/Walk_R.png"].readBitmap()
+                val spriteMapOpenChest = resourcesVfs["doll/chest_opening_R.png"].readBitmap()
+                val spriteMapAttack = resourcesVfs["doll/Attack_R.png"].readBitmap()
+                val spriteMapDead = resourcesVfs["doll/Dead.png"].readBitmap()
+                return Doll(
+                    spriteMapIdle,
+                    spriteMapWalk,
+                    spriteMapOpenChest,
+                    spriteMapAttack,
+                    spriteMapDead
+                )
+            }
+                val spriteMapIdle = resourcesVfs["knight/Idle.png"].readBitmap()
+                val spriteMapWalk = resourcesVfs["knight/Walk.png"].readBitmap()
+                val spriteMapOpenChest = resourcesVfs["knight/Attack_2.png"].readBitmap()
+                val spriteMapAttack = resourcesVfs["knight/Attack_1.png"].readBitmap()
+                val spriteMapDead = resourcesVfs["knight/Dead.png"].readBitmap()
+                return Knight(
+                    spriteMapIdle,
+                    spriteMapWalk,
+                    spriteMapOpenChest,
+                    spriteMapAttack,
+                    spriteMapDead
+                )
+        }
+
         val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
         val x0 = sceneContainer.width / 2
         val y0 = sceneContainer.height / 2
@@ -39,11 +70,8 @@ class GameView() : Scene() {
         val spriteMapChest = resourcesVfs["AoM2.png"].readBitmap()
         val spriteMapRedPotion = resourcesVfs["Red Potion.png"].readBitmap()
 
-        val spriteMapIdleDoll = resourcesVfs["doll/Idle.png"].readBitmap()
-        val spriteMapWalk = resourcesVfs["doll/Walk_R.png"].readBitmap()
-        val spriteMapOpenChest = resourcesVfs["doll/chest_opening_R.png"].readBitmap()
-        val spriteMapAttack = resourcesVfs["doll/Attack_R.png"].readBitmap()
-        val spriteMapDead = resourcesVfs["doll/Dead.png"].readBitmap()
+        val doll = choose()
+
 
         val spriteMapIdleMonster = resourcesVfs["pink/Pink_Monster_Idle_4.png"].readBitmap()
         val spriteMapHurt = resourcesVfs["pink/Pink_Monster_Hurt_4.png"].readBitmap()
@@ -53,13 +81,6 @@ class GameView() : Scene() {
 
         val loot = Loot(spriteMapRedPotion)
         val blueChest = Chest(spriteMapChest)
-        val doll = Doll(
-            spriteMapIdleDoll,
-            spriteMapWalk,
-            spriteMapOpenChest,
-            spriteMapAttack,
-            spriteMapDead
-        )
         val pink =
             Pink(spriteMapIdleMonster, spriteMapHurt, spriteMapDeath, spriteMapWalkMonster, spriteMapMonsterAttack)
 
@@ -100,12 +121,11 @@ class GameView() : Scene() {
         }
 
         var h = player.health.toInt()
-        this.hearts(4) {
+        this.hearts(h) {
             x = 10.0
             y = 10.0
             this.addUpdater {
                 if (h - 1 == PlayerManager.playerHealth) {
-                    println("-")
                     this@hearts.value--
                     h = player.health.toInt()
                 }

@@ -5,7 +5,7 @@ plugins {
 }
 
 korge {
-	id = "com.example.example"
+	id = "com.game.apk"
 // To enable all targets at once
 
 	//targetAll()

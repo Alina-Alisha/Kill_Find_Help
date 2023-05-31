@@ -23,6 +23,10 @@ import screens.*
 @OptIn(KorgeUntested::class)
 suspend fun main() = Korge(Korge.Config(module = MyModule))
 
+enum class ChosenFighter {
+    NONE, DOLL, KNIGHT
+}
+
 object MyModule : Module() {
     override val mainScene = Menu::class
 
@@ -33,6 +37,7 @@ object MyModule : Module() {
         mapPrototype { Menu() }
         mapPrototype { GameView() }
         mapPrototype { GameMenu() }
+        mapPrototype { ChooseYourFighter() }
     }
 
     var level = 1
@@ -40,4 +45,5 @@ object MyModule : Module() {
     var health = 4.0
     var numOfLoot = 1
     var passEvent = false
+    var character = ChosenFighter.NONE
 }
