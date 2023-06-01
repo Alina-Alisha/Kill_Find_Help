@@ -73,8 +73,7 @@ class ChooseYourFighter : Scene() {
             position(170, 15)
         }
 
-        var dollButton = uiButton(100.0, 40.0) {
-            text = "doll"
+        var dollButton = uiButton("doll", null, 100.0, 40.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.uiSkinBitmap = this.uiSkinBitmap.withColorTransform(colorTransform)
@@ -88,8 +87,7 @@ class ChooseYourFighter : Scene() {
                 sceneContainer.changeTo<GameMenu>()
             }
         }
-        var knightButton = uiButton(100.0, 40.0) {
-            text = "knight"
+        var knightButton = uiButton("knight", null,100.0, 40.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.uiSkinBitmap = this.uiSkinBitmap.withColorTransform(colorTransform)

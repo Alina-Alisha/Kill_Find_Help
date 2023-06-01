@@ -1,23 +1,15 @@
 import com.soywiz.korge.gradle.*
 
 plugins {
-	alias(libs.plugins.korge)
+    alias(libs.plugins.korge)
 }
 
 korge {
-	id = "com.game.apk"
-// To enable all targets at once
+    id = "com.game.fantasymaidens"
+    name = "fantasymaidens"
+    targetJvm()
+    targetJs()
 
-	//targetAll()
-
-// To enable targets based on properties/environment variables
-	//targetDefault()
-
-// To selectively enable targets
-
-	targetJvm()
-	//targetJs()
-	//targetDesktop()
-	//targetIos()
-	//targetAndroidIndirect() // targetAndroidDirect()
+    jvmMainClassName = "MainKt"
 }
+

@@ -63,7 +63,7 @@ class GameMenu : Scene() {
             position(views.virtualWidth / 2 - 70, views.virtualHeight / 2 - 157)
         }
 
-        val level1Button = uiButton(32.0, 32.0) {
+        val level1Button = uiButton("kill 2 monsters        ", null, 32.0, 32.0) {
             text = "kill 2 monsters        "
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
@@ -80,8 +80,7 @@ class GameMenu : Scene() {
         }
 
 
-        val level2Button = uiButton(32.0, 32.0) {
-            text = "kill 4 monsters        "
+        val level2Button = uiButton("kill 4 monsters        ", null,32.0, 32.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
@@ -101,8 +100,7 @@ class GameMenu : Scene() {
             }
         }
 
-        val level3Button = uiButton(32.0, 32.0) {
-            text = "kill 6 monsters        "
+        val level3Button = uiButton("kill 6 monsters        ", null,32.0, 32.0) {
             textColor = Colors.BLACK
             textFont = font
             textSize = 20.0
@@ -119,8 +117,7 @@ class GameMenu : Scene() {
             }
         }
 
-        val level4Button = uiButton(32.0, 32.0) {
-            text = "kill 7 monsters        "
+        val level4Button = uiButton("kill 7 monsters        ", null, 32.0, 32.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.buttonBackColor = this.buttonBackColor.transform(colorTransform)
@@ -140,8 +137,7 @@ class GameMenu : Scene() {
             }
         }
 
-        val level5Button = uiButton(32.0, 32.0) {
-            text = "kill 7 monsters        "
+        val level5Button = uiButton("kill 7 monsters        ", null,32.0, 32.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.buttonBackColor = this.buttonBackColor.transform(colorTransform)

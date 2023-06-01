@@ -186,8 +186,7 @@ class GameView() : Scene() {
             }
         }
 
-        var menuButton = uiButton(100.0, 32.0) {
-            text = "menu"
+        var menuButton = uiButton("menu", null, 100.0, 32.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.uiSkinBitmap = this.uiSkinBitmap.withColorTransform(colorTransform)

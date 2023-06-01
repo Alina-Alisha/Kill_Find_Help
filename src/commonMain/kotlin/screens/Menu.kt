@@ -20,14 +20,12 @@ class Menu() : Scene() {
         }
         val font = resourcesVfs["mr_countryhouseg_0.ttf"].readTtfFont(preload = false)
 
-        var gameNameText = text("Kill (us)", 40.0, Colors.BLACK, font) {
-            position(views.virtualWidth / 2 - 50, views.virtualHeight / 2 - 128)
+        var gameNameText = text("Fantasy Maidens: Monster Slayer", 40.0, Colors["#cfeecb"], font) {
+            position(30, views.virtualHeight / 2 - 128)
         }
 
 
-        var playButton = uiButton(200.0, 40.0) {
-            text = "Play"
-            //buttonBackColor = Colors["#25bf3e"]
+        var playButton = this.uiButton("Play", null, 200.0, 40.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.uiSkinBitmap = this.uiSkinBitmap.withColorTransform(colorTransform)
@@ -35,13 +33,12 @@ class Menu() : Scene() {
                 this.textSize = 30.0
                 this.textFont = font
             }
-            position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 64)
+            position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 - 54)
             onClick {
                 sceneContainer.changeTo<ChooseYourFighter>()
             }
         }
-        var exitButton = uiButton(200.0, 40.0) {
-            text = "Exit"
+        var exitButton = uiButton("Exit", null, 200.0, 40.0) {
             uiSkin = UISkin {
                 val colorTransform = ColorTransform(0.48, 0.83, 0.66)
                 this.uiSkinBitmap = this.uiSkinBitmap.withColorTransform(colorTransform)
@@ -49,7 +46,7 @@ class Menu() : Scene() {
                 this.textSize = 30.0
                 this.textFont = font
             }
-            position(views.virtualWidth / 2 - 100, views.virtualHeight / 2)
+            position(views.virtualWidth / 2 - 100, views.virtualHeight / 2 + 10)
             onClick {
                 views.gameWindow.close()
             }
