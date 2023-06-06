@@ -1,1 +1,2 @@
-# Kill_Find_Help
+# Fantasy Maidens: Monster Slayer
+Mini game on the KorGE game engine
